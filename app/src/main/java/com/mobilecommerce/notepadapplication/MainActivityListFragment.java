@@ -48,7 +48,7 @@
         public void onListItemClick(ListView listView, View view, int position, long id) {
             super.onListItemClick(listView, view, position, id);
 
-            /*we are position of the click to launchNoteDetailActivity such that we get the information
+            /*we are using position of the click to launchNoteDetailActivity such that we get the information
             based on where we click on the screen */
 
             launchNoteDetailActivity(position);
