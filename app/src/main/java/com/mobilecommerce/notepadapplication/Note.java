@@ -14,7 +14,6 @@ public class Note {
         this.title = title;
         this.description = description;
         this.category = category;
-
     }
 
     public String getTitle() {
