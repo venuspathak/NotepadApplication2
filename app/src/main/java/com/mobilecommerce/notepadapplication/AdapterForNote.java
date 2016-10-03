@@ -11,13 +11,12 @@
 
         import java.util.ArrayList;
 
-/**
- * Created by User 1 on 02/10/2016.
- */
+
 
 public class AdapterForNote extends ArrayAdapter<Note> {
 
     public AdapterForNote(Context context, ArrayList<Note> notes){
+
         super(context, 0, notes);
     }
 
@@ -56,8 +55,8 @@ public class AdapterForNote extends ArrayAdapter<Note> {
 
         //Fill each new referenced view with data associated with the note it's referencing
         ViewHolder.title.setText(note.getTitle());
-        ViewHolder.note.setText(note.getDescription());
         ViewHolder.noteIcon.setImageResource(note.getAssociatedDrawble());
+        ViewHolder.note.setText(note.getDescription());
 
         //we will have a return item here as getView is not void
         return convertView;

@@ -2,6 +2,7 @@
 
             import android.app.ListFragment;
             import android.os.Bundle;
+            import android.support.v4.content.ContextCompat;
             import android.view.View;
             import android.widget.ArrayAdapter;
             import android.widget.ListView;
@@ -38,5 +39,12 @@
         adapterForNote = new AdapterForNote(getActivity(), notes);
         setListAdapter(adapterForNote);
 
+            getListView().setDivider(ContextCompat.getDrawable(getActivity(),android.R.color.darker_gray));
+            getListView().setDividerHeight(1);
+
     }
+        @Override
+        public void onListItemClick(ListView listView, View view, int position, long id) {
+            super.onListItemClick(listView, view, position, id);
+        }
 }

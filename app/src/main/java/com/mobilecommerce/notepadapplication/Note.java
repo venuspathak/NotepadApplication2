@@ -1,36 +1,34 @@
 
         package com.mobilecommerce.notepadapplication;
 
-/**
- * Created by User 1 on 02/10/2016.
- */
+
 
 public class Note {
 
-    private String title, description;
+    private String noteTitle, noteDescription;
     private long noteId, dateCreated;
-    private Category category;
+    private Category noteCategory;
 
     public enum Category {PERSONAL, FAMILY, SCHOOL, BILL, FOOD, DEFAULT, PARTY, SHOPPING, THOUGHTS }
 
-    public Note(String title, String description, Category category) {
-        this.title = title;
-        this.description = description;
-        this.category = category;
+    public Note(String noteTitle, String noteDescription, Category noteCategory) {
+        this.noteTitle = noteTitle;
+        this.noteDescription = noteDescription;
+        this.noteCategory = noteCategory;
         this.noteId = noteId;
         this.dateCreated = dateCreated;
     }
 
     public String getTitle() {
-        return title;
+        return noteTitle;
     }
 
     public String getDescription() {
-        return description;
+        return noteDescription;
     }
 
     public Category getCategory() {
-        return category;
+        return noteCategory;
     }
 
     public long getNoteId() {
@@ -42,17 +40,15 @@ public class Note {
     }
 
     public String toString() {
-        return "ID:" + noteId + "Title" + title + "Description" + description + "IconID" + category.name() + "Date: " + dateCreated;
+        return "ID:" + noteId + "Title" + noteTitle + "Description" + noteDescription + "IconID" + noteCategory.name() + "Date: " + dateCreated;
     }
 
     public int getAssociatedDrawble() {
-        return categoryToDrawble(category);
+        return categoryToDrawble(noteCategory);
     }
 
     public static int categoryToDrawble(Category noteCategory) {
         switch (noteCategory) {
-            case PERSONAL:
-                return R.drawable.personal;
 
             case FAMILY:
                 return R.drawable.family;
@@ -77,6 +73,11 @@ public class Note {
 
             case THOUGHTS:
                 return R.drawable.thoughts;
+
+            case PERSONAL:
+                return R.drawable.personal;
+
+
         }
         return categoryToDrawble(noteCategory);
     }
