@@ -1,31 +1,42 @@
-package com.mobilecommerce.notepadapplication;
+    package com.mobilecommerce.notepadapplication;
 
-import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.ListFragment;
-import android.view.View;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
+            import android.app.ListFragment;
+            import android.os.Bundle;
+            import android.view.View;
+            import android.widget.ArrayAdapter;
+            import android.widget.ListView;
 
-/**
- * A simple {@link Fragment} subclass.
- */
-public class MainActivityListFragment extends ListFragment {
+            import java.util.ArrayList;
 
+    public class MainActivityListFragment extends ListFragment {
 
-    public void onActivityCreated(Bundle savedInstance)
-    {
-      super.onActivityCreated(savedInstance);
+        private ArrayList<Note> notes;
+        private AdapterForNote adapterForNote;
 
+        public void onActivityCreated(Bundle savedInstance) {
+            super.onActivityCreated(savedInstance);
+
+/*
         String[] notes = new String[] {"My first note", "I owe $100 to Shawn", "Family Gathering on Oct 12", "Remind Mom about Party"};
         ArrayAdapter<String> notesAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, notes);
 
         setListAdapter(notesAdapter);
+*/
 
-     }
+        notes = new ArrayList<Note>();
+        notes.add(new Note("PERSONAL NOTE", "This is my personal note", Note.Category.PERSONAL));
+        notes.add(new Note("BILL", "Phone bill for September", Note.Category.BILL));
+        notes.add(new Note("FAMILY RELATED NOTE", "Family gathering this week", Note.Category.FAMILY));
+        notes.add(new Note("FOOD EXPENDITURE", "Spent $50 on Dinner", Note.Category.FOOD));
+        notes.add(new Note("PARTY THIS MONTH", "Party for new graduate students", Note.Category.PARTY));
+        notes.add(new Note("BOOK RELATED EXPENSES", "Spent $200 for books", Note.Category.SCHOOL));
+        notes.add(new Note("WALMART", "Grocery on Sep 28", Note.Category.SHOPPING));
+        notes.add(new Note("SONG PLAYLIST", "This has playlist of all the songs I like", Note.Category.THOUGHTS));
+        notes.add(new Note("USERNAME FOR MY HOMEPAGE", "My username and password", Note.Category.DEFAULT));
 
-    public void onListItemClick(ListView listView, View view, int position, long id)
-    {
-      super.onListItemClick(listView, view, position, id);
+
+        adapterForNote = new AdapterForNote(getActivity(), notes);
+        setListAdapter(adapterForNote);
+
     }
 }
