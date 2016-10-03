@@ -1,6 +1,7 @@
     package com.mobilecommerce.notepadapplication;
 
             import android.app.ListFragment;
+            import android.content.Intent;
             import android.os.Bundle;
             import android.support.v4.content.ContextCompat;
             import android.view.View;
@@ -46,5 +47,27 @@
         @Override
         public void onListItemClick(ListView listView, View view, int position, long id) {
             super.onListItemClick(listView, view, position, id);
+
+            /*we are position of the click to launchNoteDetailActivity such that we get the information
+            based on where we click on the screen */
+
+            launchNoteDetailActivity(position);
+        }
+
+        private void launchNoteDetailActivity(int position) // launchNoteDetailActivity will show us individual notes.
+        {
+            /*We are using this to basically grab all the data related to the note we have clicked.
+              We will create a new intent and further pass along the information of a particular
+              note such as its ID,Category,Title and Body */
+
+            Note note = (Note) getListAdapter().getItem(position);
+
+            Intent intent = new Intent(getActivity(),ActivityOfNoteDetails.class);
+            intent.putExtra(MainActivity.Second_Note_Id, note.getNoteId());
+            intent.putExtra(MainActivity.Second_Note_Category,note.getCategory());
+            intent.putExtra(MainActivity.Second_Note_Title, note.getTitle());
+            intent.putExtra(MainActivity.Second_Note_Body,note.getDescription());
+
+            startActivity(intent);
         }
 }

@@ -12,6 +12,14 @@ import android.view.MenuItem;
 
 
 public class MainActivity extends AppCompatActivity{
+
+    //Using the package name so that we donot get confused between keys when we will try to implement the share on facebook part
+    public static final String Second_Note_Id = "com.mobilecommerce.notepadapplication.Note Identifier";
+    public static final String Second_Note_Title = "com.mobilecommerce.notepadapplication.Note Title";
+    public static final String Second_Note_Body = "com.mobilecommerce.notepadapplication.Note Body";
+    public static final String Second_Note_Category = "com.mobilecommerce.notepadapplication.Note Category";
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
