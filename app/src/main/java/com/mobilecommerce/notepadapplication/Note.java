@@ -8,14 +8,13 @@ public class Note {
     private long noteId, dateCreated;
     private Category category;
 
-    public enum Category {BILL, FAMILY, FOOD, MAIN, PARTY, PERSONAL, SCHOOL, SHOPPING, THOUGHTS}
+    private enum Category {BILL, FAMILY, FOOD, MAIN, PARTY, PERSONAL, SCHOOL, SHOPPING, THOUGHTS}
 
     public Note(String title, String description, Category category) {
         this.title = title;
         this.description = description;
         this.category = category;
-        this.noteId = noteId;
-        this.dateCreated = dateCreated;
+
     }
 
     public String getTitle() {
@@ -38,7 +37,7 @@ public class Note {
         return categoryToDrawble(category);
     }
 
-    public static int categoryToDrawble(Category noteCategory) {
+    private static int categoryToDrawble(Category noteCategory) {
         switch(noteCategory) {
             case BILL:
                 return R.drawable.bill;
