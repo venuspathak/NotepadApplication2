@@ -4,6 +4,10 @@
             import android.content.Intent;
             import android.os.Bundle;
             import android.support.v4.content.ContextCompat;
+            import android.util.Log;
+            import android.view.ContextMenu;
+            import android.view.MenuInflater;
+            import android.view.MenuItem;
             import android.view.View;
             import android.widget.ArrayAdapter;
             import android.widget.ListView;
@@ -52,6 +56,8 @@
             getListView().setDivider(ContextCompat.getDrawable(getActivity(),android.R.color.darker_gray));
             getListView().setDividerHeight(1);
 
+            registerForContextMenu(getListView());
+
     }
         @Override
         public void onListItemClick(ListView listView, View view, int position, long id) {
@@ -78,5 +84,23 @@
             intent.putExtra(MainActivity.Second_Note_Body,note.getDescription());
 
             startActivity(intent);
+        }
+
+        @Override
+        public void onCreateContextMenu (ContextMenu contextMenu, View view, ContextMenu.ContextMenuInfo contextMenuInfo) {
+            super.onCreateContextMenu(contextMenu,view,contextMenuInfo);
+
+            MenuInflater menuInflater = getActivity().getMenuInflater();
+            menuInflater.inflate(R.menu.menu_on_long_press, contextMenu);
+
+        }
+
+        @Override
+        public boolean onContextItemSelected(MenuItem menuItem){
+            switch (menuItem.getItemId()) {
+                case R.id.edit:
+                    return true;
+            }
+            return super.onContextItemSelected(menuItem);
         }
 }
