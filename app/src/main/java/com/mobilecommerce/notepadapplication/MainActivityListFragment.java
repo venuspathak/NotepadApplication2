@@ -35,6 +35,15 @@
         notes.add(new Note("WALMART", "Grocery on Sep 28", Note.Category.SHOPPING));
         notes.add(new Note("SONG PLAYLIST", "This has playlist of all the songs I like", Note.Category.THOUGHTS));
         notes.add(new Note("USERNAME FOR MY HOMEPAGE", "My username and password", Note.Category.DEFAULT));
+        notes.add(new Note("TEST NOTE", "I am going to write a really long note and see if the scrolling for this " +
+                "test note actually works or not. Otherwise we might have to think of something else to do. Now I am " +
+                "just going to copy a few lines from my favorite poem just so we have a lot of lines             " +
+                " Whose woods these are I think I know.His house is in the village though;He will not see me stopping" +
+                " here To watch his woods fill up with snow.My little horse must think it queer To stop without a farmhouse" +
+                " near Between the woods and frozen lake The darkest evening of the year.His gives his harness bells a " +
+                "shake To ask if there is some mistake. The only other sound's the sweep of easy wind and downy flake. " +
+                "The woods are lovely,dark and deep, but I have promises to keep and miles to go before I sleep and miles " +
+                "to go before I sleep", Note.Category.THOUGHTS));
 
 
         adapterForNote = new AdapterForNote(getActivity(), notes);
