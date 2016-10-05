@@ -9,6 +9,7 @@
             import android.view.MenuInflater;
             import android.view.MenuItem;
             import android.view.View;
+            import android.widget.AdapterView;
             import android.widget.ArrayAdapter;
             import android.widget.ListView;
 
@@ -66,10 +67,10 @@
             /*we are using position of the click to launchNoteDetailActivity such that we get the information
             based on where we click on the screen */
 
-            launchNoteDetailActivity(position);
+            launchNoteDetailActivity(MainActivity.FragmentToLoad.VIEW, position);
         }
 
-        private void launchNoteDetailActivity(int position) // launchNoteDetailActivity will show us individual notes.
+        private void launchNoteDetailActivity(MainActivity.FragmentToLoad fragmentToLoad, int position) // launchNoteDetailActivity will show us individual notes.
         {
             /*We are using this to basically grab all the data related to the note we have clicked.
               We will create a new intent and further pass along the information of a particular
@@ -82,6 +83,18 @@
             intent.putExtra(MainActivity.Second_Note_Category,note.getCategory());
             intent.putExtra(MainActivity.Second_Note_Title, note.getTitle());
             intent.putExtra(MainActivity.Second_Note_Body,note.getDescription());
+
+            switch (fragmentToLoad){
+
+                case VIEW:
+
+                    intent.putExtra(MainActivity.Second_Note_Fragment_To_Load, MainActivity.FragmentToLoad.VIEW);
+                    break;
+
+                case EDIT:
+                    intent.putExtra(MainActivity.Second_Note_Fragment_To_Load, MainActivity.FragmentToLoad.EDIT);
+                    break;
+            }
 
             startActivity(intent);
         }
@@ -96,9 +109,15 @@
         }
 
         @Override
-        public boolean onContextItemSelected(MenuItem menuItem){
+        public boolean onContextItemSelected(MenuItem menuItem){//it returns the if of whatever menu we select
+
+            AdapterView.AdapterContextMenuInfo adapterContextMenuInfo = (AdapterView.AdapterContextMenuInfo) menuItem.getMenuInfo();
+            int rowPosition = adapterContextMenuInfo.position;
+
             switch (menuItem.getItemId()) {
-                case R.id.edit:
+                case R.id.edit:// if we press edit, it will return the following
+
+                    launchNoteDetailActivity(MainActivity.FragmentToLoad.EDIT, rowPosition);
                     return true;
             }
             return super.onContextItemSelected(menuItem);

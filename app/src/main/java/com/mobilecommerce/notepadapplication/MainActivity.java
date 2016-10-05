@@ -18,6 +18,9 @@ public class MainActivity extends AppCompatActivity{
     public static final String Second_Note_Title = "com.mobilecommerce.notepadapplication.Note Title";
     public static final String Second_Note_Body = "com.mobilecommerce.notepadapplication.Note Body";
     public static final String Second_Note_Category = "com.mobilecommerce.notepadapplication.Note Category";
+    public static final String Second_Note_Fragment_To_Load = "com.mobilecommerce.notepadapplication.Fragment To Load";
+    public enum FragmentToLoad{VIEW, EDIT}
+
 
 
     @Override

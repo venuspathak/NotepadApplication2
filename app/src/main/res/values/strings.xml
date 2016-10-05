@@ -1,15 +1,19 @@
 <resources>
-    <string name="app_name">NotepadApplication</string>
+    <string name="app_name"> My Notepad</string>
     <string name="action_settings">Settings</string>
 
     <!-- Fragment title strings -->
-    <string name="view_Note_Fragment_Title">View Note Fragment Title</string>
-    <string name="edit_Note_Fragment_Title">Edit Note Fragment Title</string>
+    <string name="view_Note_Fragment_Title">View Note</string>
+    <string name="edit_Note_Fragment_Title">Edit Note</string>
 
     <!-- Main list Long Click Context Menu-->
     <string name="edit_menu">Edit Menu</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <!-- Save Button on Edit Fragment-->
+    <string name="save_button">Save Me!</string>
+
+    <!-- Enter Text on edit fragment-->
+    <string name="type_here">Type Here Please!</string>
+
 
 </resources>
