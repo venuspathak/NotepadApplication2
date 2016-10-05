@@ -35,16 +35,17 @@ public class ActivityOfNoteDetails extends AppCompatActivity {
                 EditNoteFragment editNoteFragment = new EditNoteFragment();
                 setTitle(R.string.edit_Note_Fragment_Title);
                 fragmentTransaction.add
-                        (R.id.activity_of_note_details,editNoteFragment, "Edit Note");
+                        (R.id.activity_of_note_details,editNoteFragment, "EDIT_NOTE_FRAGMENT");
 
                 break;
 
             case VIEW:
 
-                //create and add note edit fragment to edit note activity if we want it to launch
+                //create and add note view fragment to edit note activity if we want it to launch
                 ViewNoteFragment viewNoteFragment = new ViewNoteFragment();
-                setTitle("View Note");
-                fragmentTransaction.add(R.id.activity_of_note_details, viewNoteFragment, "View Note");
+                setTitle(R.string.view_Note_Fragment_Title);
+                fragmentTransaction.add
+                        (R.id.activity_of_note_details, viewNoteFragment, "VIEW_NOTE_FRAGMENT");
 
                 break;
         }

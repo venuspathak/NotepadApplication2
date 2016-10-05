@@ -55,7 +55,6 @@
             android:layout_height="wrap_content"
             android:minLines="3"
             android:id="@+id/editNoteMessage"
-            android:text="@string/type_here"
             android:textSize="20sp"
             android:textColor="#000000"
             android:background="@null"

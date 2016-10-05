@@ -12,8 +12,5 @@
     <!-- Save Button on Edit Fragment-->
     <string name="save_button">Save Me!</string>
 
-    <!-- Enter Text on edit fragment-->
-    <string name="type_here">Type Here Please!</string>
-
 
 </resources>
