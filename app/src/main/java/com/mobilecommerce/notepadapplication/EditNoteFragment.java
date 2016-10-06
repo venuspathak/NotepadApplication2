@@ -49,6 +49,16 @@ public class EditNoteFragment extends Fragment {
         noteCategoryButton.setImageResource(Note.categoryToDrawble(noteCategory));
 
         buildCategoryDialog();
+
+        //setting a listerner on the note category button
+        noteCategoryButton.setOnClickListener(new View.OnClickListener(){
+
+            @Override
+            public void onClick(View view) {
+                categoryAlertDialogObject.show();
+            }
+        });
+
         return fragmentLayout;
     }
 
@@ -61,7 +71,7 @@ public class EditNoteFragment extends Fragment {
         AlertDialog.Builder noteCategoryBuilder = new AlertDialog.Builder(getActivity());
         noteCategoryBuilder.setTitle("Please choose Note Category");
 
-        noteCategoryBuilder.setSingleChoiceItems(categories, 0, new DialogInterface.OnClickListener() {
+        noteCategoryBuilder.setSingleChoiceItems(categories, 3, new DialogInterface.OnClickListener() { // We have given 3 because we want our Default to be 'Default' which is 4th in our category array
             @Override
             public void onClick(DialogInterface dialog, int selectCategory) {
 
