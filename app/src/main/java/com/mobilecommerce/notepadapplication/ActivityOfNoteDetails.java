@@ -8,6 +8,7 @@ import android.os.Bundle;
 
 public class ActivityOfNoteDetails extends AppCompatActivity {
 
+    public static final String NEW_NOTE = "New Note";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -29,6 +30,22 @@ public class ActivityOfNoteDetails extends AppCompatActivity {
 
         // using switch so that we can choose the correct fragment(either edit or load) so that we oad it
         switch (fragmentToLoad) {
+
+            case ADD:
+
+                //This is launched when a new note needs to be added, we will still use EditNoteFragment
+                EditNoteFragment addNewNoteFragment = new EditNoteFragment();
+                setTitle(R.string.add_Note_Fragment_Title);
+
+                Bundle bundle = new Bundle();
+                bundle.putBoolean(NEW_NOTE, true);
+                addNewNoteFragment.setArguments(bundle);
+
+                fragmentTransaction.add
+                        (R.id.activity_of_note_details,addNewNoteFragment, "ADD_NOTE_FRAGMENT");
+
+                break;
+
             case EDIT:
 
                 //create and add note edit fragment to edit note activity if we want it to launch

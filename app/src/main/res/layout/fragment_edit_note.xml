@@ -68,7 +68,8 @@
         android:id="@+id/saveNoteButton"
         android:text="@string/save_button"
         android:layout_alignParentBottom="true"
-        android:layout_alignStart="@+id/editMessageScrollView" />
+        android:layout_alignStart="@+id/editMessageScrollView"
+        android:onClick="saveNote"/>
 
 </RelativeLayout>
 

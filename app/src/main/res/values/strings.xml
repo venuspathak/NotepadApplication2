@@ -1,10 +1,14 @@
 <resources>
     <string name="app_name"> My Notepad</string>
+
+    <!-- Main Menu -->
     <string name="action_settings">Settings</string>
+    <string name="action_add_note">ADD NOTE</string>
 
     <!-- Fragment title strings -->
-    <string name="view_Note_Fragment_Title">View Note</string>
-    <string name="edit_Note_Fragment_Title">Edit Note</string>
+    <string name="view_Note_Fragment_Title">VIEWING NOTE</string>
+    <string name="edit_Note_Fragment_Title">EDITING NOTE</string>
+    <string name="add_Note_Fragment_Title">ADDING NOTE</string>
 
     <!-- Main list Long Click Context Menu-->
     <string name="edit_menu">Edit Menu</string>
