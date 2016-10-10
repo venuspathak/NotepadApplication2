@@ -1,9 +1,12 @@
 package com.mobilecommerce.notepadapplication;
 
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.media.MediaScannerConnection;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.annotation.VisibleForTesting;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
@@ -17,6 +20,17 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 
 
 /**
@@ -30,6 +44,10 @@ public class EditNoteFragment extends Fragment {
     private EditText title, body;
     private static final String categoryModified = "Modified Category";
     public Boolean newNote = false;
+    private static final String noteTextFile = "noteTextFile10.txt";
+    private EditText textEditor;
+    private Note.Category noteCategoryFinal;
+
 
     public EditNoteFragment() {
         // Required empty public constructor
@@ -73,9 +91,17 @@ public class EditNoteFragment extends Fragment {
             Note.Category noteCategory = (Note.Category) intent.getSerializableExtra(MainActivity.Second_Note_Category);
             savedNoteCategoryButton = noteCategory;
             noteCategoryButton.setImageResource(Note.categoryToDrawble(noteCategory));
+           // noteCategoryFinal=noteCategory; // This has been done to set the global variable with the modified category so that
+            // it can be accessed in the method for writing into file
         }
+    //    else if(newNote){
+      //      Note.Category noteCategory = (Note.Category) intent.getSerializableExtra(MainActivity.);
+        //    savedNoteCategoryButton = noteCategory;
+          //  noteCategoryButton.setImageResource(Note.categoryToDrawble(noteCategory));
+        //}
+
         buildCategoryDialog();
-        buildingConfirmDialog();
+        buildingConfirmDialog(fragmentLayout);
 
         //setting a listener on the note category button
         noteCategoryButton.setOnClickListener(new View.OnClickListener(){
@@ -194,7 +220,7 @@ public class EditNoteFragment extends Fragment {
 
     }
 
-    public void buildingConfirmDialog(){
+    public void buildingConfirmDialog(final View view){
 
         AlertDialog.Builder builderForConfirm = new AlertDialog.Builder(getActivity());
         builderForConfirm.setTitle("ARE YOU SURE");
@@ -205,18 +231,32 @@ public class EditNoteFragment extends Fragment {
             public void onClick(DialogInterface dialog, int which){
                 // Save into database here
                 Log.d("Save Note", "Note title: "+ title.getText()+ "Note message: "+body.getText()+ "Note category: "+ savedNoteCategoryButton); // Save Note is the key
-                title.setText(title.getText());
-                body.setText(body.getText());
+                // title.setText(title.getText());
+                //body.setText(body.getText());
 
-                final String changedTitle = title.getText().toString();
-                final String changedBody = body.getText().toString();
+                // final String changedTitle = title.getText().toString();
+                //final String changedBody = body.getText().toString();
 
-                title.setText(changedTitle, TextView.BufferType.EDITABLE);
-                body.setText(changedBody, TextView.BufferType.EDITABLE);
+                //title.setText(changedTitle, TextView.BufferType.EDITABLE);
+                // body.setText(changedBody, TextView.BufferType.EDITABLE);
 
-               // savedNoteCategoryButton
+                // savedNoteCategoryButton
 
-               // title.setText("ABC");
+                // title.setText("ABC");
+
+                String notetitle = title.getText().toString();
+                String noteBody = body.getText().toString();
+                String noteCategory;
+
+                if(savedNoteCategoryButton==null)
+                    noteCategory = "DEFAULT" ;
+                else
+                    noteCategory = savedNoteCategoryButton.toString();
+
+                String textToBeWrittenIntoFile = notetitle+","+noteBody+","+noteCategory;
+
+                saveNoteIntoFile(view, textToBeWrittenIntoFile);
+                //getTextFromNoteFile();
                 Intent intent = new Intent(getActivity(), MainActivity.class);
                 startActivity(intent);
             }
@@ -227,6 +267,7 @@ public class EditNoteFragment extends Fragment {
             @Override
             public void onClick(DialogInterface dialog, int which){
                 // NOTHING IS REQUIRED HERE
+                getTextFromNoteFile();
                 Intent intent = new Intent(getActivity(), MainActivity.class);
                 startActivity(intent);
             }
@@ -234,5 +275,73 @@ public class EditNoteFragment extends Fragment {
         });
 
         dialogForConfirm = builderForConfirm.create();
+    }
+
+    public void saveNoteIntoFile(View v, String textToBeWrittenIntoFile){
+        final Context context = getActivity().getApplicationContext();
+        try {
+            //  File file = new File(context.getExternalFilesDir(null),noteTextFile);
+            File file = new File(noteTextFile);
+
+            //if (file.exists())
+            // {
+            FileOutputStream fileOutputStream = context.openFileOutput(noteTextFile, Context.MODE_APPEND);
+            OutputStreamWriter outputStreamWriter = new OutputStreamWriter(fileOutputStream);
+            outputStreamWriter.write(textToBeWrittenIntoFile);
+            outputStreamWriter.write("\n");
+            outputStreamWriter.close();
+
+            //}else{
+
+            //  OutputStreamWriter outputStreamWriter = new OutputStreamWriter(context.openFileOutput(noteTextFile, 0));
+            //outputStreamWriter.write(textToBeWrittenIntoFile);
+            //outputStreamWriter.close();
+            // }
+            Toast.makeText(context, "THE NOTE HAS BEEN SAVED.", Toast.LENGTH_LONG).show();
+
+
+            //  if(!file.exists())
+            //     file.createNewFile();
+
+//            BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(file, true /*append*/));
+            //          bufferedWriter.write(textToBeWrittenIntoFile);
+            //        bufferedWriter.close();
+
+//            MediaScannerConnection.scanFile(context, new String[]{file.toString()}, null, null);
+
+        }catch(Throwable throwable){
+            Toast.makeText(context, "EXCEPTION: "+throwable.toString(), Toast.LENGTH_LONG).show();
+        }
+
+    }
+
+    public void getTextFromNoteFile(){
+        final Context context = getActivity().getApplicationContext();
+        try {
+            InputStream inputStream = context.openFileInput(noteTextFile);
+
+            if(inputStream!=null){
+
+                InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
+                BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+                String string;
+                StringBuilder stringBuilder = new StringBuilder();
+
+                while((string=bufferedReader.readLine())!=null){
+                    stringBuilder.append(string+"\n");
+                }
+
+                inputStream.close();
+                Log.d("OUTPUT",stringBuilder.toString());
+            }
+
+        }catch(FileNotFoundException e){
+            Log.d("EXCEPTION: ", e.toString());
+        }
+
+        catch(Throwable throwable){
+            Toast.makeText(context, "", Toast.LENGTH_SHORT).show();
+        }
+
     }
 }

@@ -1,6 +1,7 @@
     package com.mobilecommerce.notepadapplication;
 
             import android.app.ListFragment;
+            import android.content.Context;
             import android.content.Intent;
             import android.os.Bundle;
             import android.support.v4.content.ContextCompat;
@@ -12,13 +13,23 @@
             import android.widget.AdapterView;
             import android.widget.ArrayAdapter;
             import android.widget.ListView;
+            import android.widget.Toast;
 
+            import java.io.BufferedReader;
+            import java.io.File;
+            import java.io.FileNotFoundException;
+            import java.io.InputStream;
+            import java.io.InputStreamReader;
             import java.util.ArrayList;
 
     public class MainActivityListFragment extends ListFragment {
 
         private ArrayList<Note> notes;
         private AdapterForNote adapterForNote;
+        private static final String noteTextFile = "noteTextFile10.txt";
+        private String[] rowsOfNotes;
+        private String[][] entireNote = new String[10][];;
+
 
         public void onActivityCreated(Bundle savedInstance) {
             super.onActivityCreated(savedInstance);
@@ -30,7 +41,11 @@
         setListAdapter(notesAdapter);
 */
 
+
         notes = new ArrayList<Note>();
+        getTextFromNoteFile(notes);
+
+        /*
         notes.add(new Note("PERSONAL NOTE", "This is my personal note", Note.Category.PERSONAL));
         notes.add(new Note("BILL", "Phone bill for September", Note.Category.BILL));
         notes.add(new Note("FAMILY RELATED NOTE", "Family gathering this week", Note.Category.FAMILY));
@@ -50,7 +65,7 @@
                 "The woods are lovely,dark and deep, but I have promises to keep and miles to go before I sleep and miles " +
                 "to go before I sleep", Note.Category.THOUGHTS));
 
-
+*/
         adapterForNote = new AdapterForNote(getActivity(), notes);
         setListAdapter(adapterForNote);
 
@@ -97,6 +112,83 @@
             }
 
             startActivity(intent);
+        }
+
+        public void getTextFromNoteFile(ArrayList notes){
+            final Context context = getActivity().getApplicationContext();
+            try {
+                File file = context.getFileStreamPath(noteTextFile);
+                if(file.exists()) {
+                    InputStream inputStream = context.openFileInput(noteTextFile);
+
+                    if (inputStream != null) {
+
+                        InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
+                        BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+                        String string;
+                        StringBuilder stringBuilder = new StringBuilder();
+
+                        while ((string = bufferedReader.readLine()) != null) {
+                            stringBuilder.append(string + "\n");
+                        }
+
+                        inputStream.close();
+                        Log.d("OUTPUT", stringBuilder.toString());
+                        String fileText = stringBuilder.toString();
+                        rowsOfNotes = fileText.split("\n");
+
+                        Log.d("OUTPUT ROWS", rowsOfNotes[0]+","+rowsOfNotes[1]+","+rowsOfNotes[2]);
+
+                        Log.d("LENGTH", String.valueOf(rowsOfNotes.length));
+
+
+                        for(int rowNumber=0; rowNumber< rowsOfNotes.length; rowNumber++) {
+                            entireNote[rowNumber] = rowsOfNotes[rowNumber].split(",");
+                            Log.d("NOTE LENGTH",String.valueOf(entireNote[rowNumber].length));
+                            Log.d("NOTE TILE",entireNote[rowNumber][0] );
+                        }
+                        for(int noteParts=0; noteParts<rowsOfNotes.length; noteParts++) {
+                            Note.Category category=null;
+
+                            if(entireNote[noteParts][2].equals("PERSONAL"))
+                                category = Note.Category.PERSONAL;
+                            else if(entireNote[noteParts][2].equals("FAMILY"))
+                                category = Note.Category.FAMILY;
+                            else if(entireNote[noteParts][2].equals("SCHOOL"))
+                                category = Note.Category.SCHOOL;
+                            else if(entireNote[noteParts][2].equals("BILL"))
+                                category = Note.Category.BILL;
+                            else if(entireNote[noteParts][2].equals("FOOD"))
+                                category = Note.Category.FOOD;
+                            else if(entireNote[noteParts][2].equals("DEFAULT"))
+                                category = Note.Category.DEFAULT;
+                            else if(entireNote[noteParts][2].equals("PARTY"))
+                                category = Note.Category.PARTY;
+                            else if(entireNote[noteParts][2].equals("SHOPPING"))
+                                category = Note.Category.SHOPPING;
+                            else if(entireNote[noteParts][2].equals("THOUGHTS"))
+                                category = Note.Category.THOUGHTS;
+
+                            //Log.d("LENGTH OF ARRAY", String.valueOf(rowsOfNotes.length));
+                            //Log.d("TITLE: " + (noteParts + 1), entireNote[noteParts][0]);
+                            //Log.d("BODY: " + (noteParts + 1), entireNote[noteParts][1]);
+                            //Log.d("CATEGORY: " + (noteParts + 1), entireNote[noteParts][2]);
+
+                            notes.add(new Note(entireNote[noteParts][0],entireNote[noteParts][1],category));
+                        }
+
+                    }
+
+                }
+
+            }catch(FileNotFoundException e){
+                Log.d("EXCEPTION: ", e.toString());
+            }
+
+            catch(Throwable throwable){
+                Toast.makeText(context, "", Toast.LENGTH_SHORT).show();
+            }
+
         }
 
         @Override

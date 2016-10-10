@@ -1,7 +1,10 @@
 
-        package com.mobilecommerce.notepadapplication;
+package com.mobilecommerce.notepadapplication;
 
 
+import android.view.View;
+
+import java.io.InputStream;
 
 public class Note {
 
@@ -81,4 +84,6 @@ public class Note {
         }
         return categoryToDrawble(noteCategory);
     }
+
+
 }
