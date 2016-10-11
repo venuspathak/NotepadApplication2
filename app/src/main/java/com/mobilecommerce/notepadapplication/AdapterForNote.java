@@ -6,6 +6,7 @@
         import android.view.View;
         import android.view.ViewGroup;
         import android.widget.ArrayAdapter;
+        import android.widget.ImageButton;
         import android.widget.ImageView;
         import android.widget.TextView;
 
@@ -24,6 +25,7 @@ public class AdapterForNote extends ArrayAdapter<Note> {
         static TextView title;
         static TextView note;
         static ImageView noteIcon;
+        static ImageButton colorIcon;
     }
 
     @Override
@@ -44,6 +46,7 @@ public class AdapterForNote extends ArrayAdapter<Note> {
             viewHolder.title = (TextView) convertView.findViewById(R.id.noteTitle);
             viewHolder.note = (TextView) convertView.findViewById(R.id.noteBody);
             viewHolder.noteIcon = (ImageView) convertView.findViewById(R.id.noteImage);
+            viewHolder.colorIcon = (ImageButton)convertView.findViewById(R.id.colorPicker);
 
             convertView.setTag(viewHolder);
         }

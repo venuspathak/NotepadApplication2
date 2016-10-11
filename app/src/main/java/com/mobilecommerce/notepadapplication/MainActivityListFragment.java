@@ -1,13 +1,13 @@
-    package com.mobilecommerce.notepadapplication;
+package com.mobilecommerce.notepadapplication;
 
-            import android.app.ListFragment;
-            import android.content.Context;
-            import android.content.Intent;
-            import android.os.Bundle;
-            import android.support.v4.content.ContextCompat;
-            import android.util.Log;
-            import android.view.ContextMenu;
-            import android.view.MenuInflater;
+import android.app.ListFragment;
+import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
+import android.util.Log;
+import android.view.ContextMenu;
+import android.view.MenuInflater;
             import android.view.MenuItem;
             import android.view.View;
             import android.widget.AdapterView;
@@ -22,6 +22,8 @@
             import java.io.InputStreamReader;
             import java.util.ArrayList;
 
+
+
     public class MainActivityListFragment extends ListFragment {
 
         private ArrayList<Note> notes;
@@ -34,12 +36,6 @@
         public void onActivityCreated(Bundle savedInstance) {
             super.onActivityCreated(savedInstance);
 
-/*
-        String[] notes = new String[] {"My first note", "I owe $100 to Shawn", "Family Gathering on Oct 12", "Remind Mom about Party"};
-        ArrayAdapter<String> notesAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, notes);
-
-        setListAdapter(notesAdapter);
-*/
 
 
         notes = new ArrayList<Note>();

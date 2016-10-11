@@ -12,6 +12,7 @@ public class Note {
     private long noteId, dateCreated;
     private Category noteCategory;
 
+
     public enum Category {PERSONAL, FAMILY, SCHOOL, BILL, FOOD, DEFAULT, PARTY, SHOPPING, THOUGHTS }
 
     public Note(String noteTitle, String noteDescription, Category noteCategory) {

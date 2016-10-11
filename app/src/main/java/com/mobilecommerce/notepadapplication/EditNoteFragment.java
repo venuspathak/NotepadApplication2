@@ -8,10 +8,19 @@ import android.media.MediaScannerConnection;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.annotation.VisibleForTesting;
+import android.app.Activity;
+import android.content.ContentResolver;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.net.Uri;
+import android.nfc.Tag;
+import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
+import android.support.v4.os.EnvironmentCompat;
 import android.support.v7.app.AlertDialog;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,9 +28,10 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -31,6 +41,10 @@ import java.io.FileWriter;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+import java.io.File;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 
 /**
@@ -38,15 +52,26 @@ import java.io.OutputStreamWriter;
  */
 public class EditNoteFragment extends Fragment {
 
-    private ImageButton noteCategoryButton;
+    private ImageButton noteCategoryButton, noteColorCategoryButton;
     private Note.Category savedNoteCategoryButton;
-    public AlertDialog categoryAlertDialogObject, dialogForConfirm;
+    private Colors.ColorCategory savedColorCategoryButton;
+    public AlertDialog categoryAlertDialogObject, dialogForConfirm, colorAlertDialogObject;
     private EditText title, body;
     private static final String categoryModified = "Modified Category";
     public Boolean newNote = false;
     private static final String noteTextFile = "noteTextFile10.txt";
     private EditText textEditor;
     private Note.Category noteCategoryFinal;
+
+    private static final int PICK_IMAGE = 100;
+    private static final int CAMERA_REQUEST = 1;
+    private ImageView editNoteGallery, imageView, editNoteCamera;
+    private Bitmap bitmapImage;
+    private String currentPhotoPath;
+    private static final String TAG = "";
+    private RelativeLayout relativeLayout;
+
+    Uri uri;
 
 
     public EditNoteFragment() {
@@ -76,6 +101,39 @@ public class EditNoteFragment extends Fragment {
         body = (EditText) fragmentLayout.findViewById(R.id.editNoteMessage);
         noteCategoryButton = (ImageButton) fragmentLayout.findViewById(R.id.editNoteButtonImage);
         Button saveButton = (Button) fragmentLayout.findViewById(R.id.saveNoteButton);
+        imageView = (ImageView) fragmentLayout.findViewById(R.id.imageView);
+        editNoteGallery = (ImageView)fragmentLayout.findViewById(R.id.editNoteGallery);
+        noteColorCategoryButton = (ImageButton)fragmentLayout.findViewById(R.id.colorPicker);
+        editNoteCamera = (ImageView) fragmentLayout.findViewById(R.id.editNoteCamera);
+        relativeLayout = (RelativeLayout) fragmentLayout.findViewById(R.id.backGroundColor);
+
+        //Setting onClick Listerner on Gallery Button
+        editNoteGallery.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openGallery();
+            }
+        });
+
+        //Setting onClick Listerner on Camera Button
+        editNoteCamera.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openCamera();
+            }
+        });
+
+
+        //Seting onCLick Listerner on ColorCategory Button
+        noteColorCategoryButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                colorAlertDialogObject.show();
+            }
+        });
+
+
+
 
 
         //populating with data. We are using this to actually populate the fragment with our existing note data.
@@ -102,6 +160,8 @@ public class EditNoteFragment extends Fragment {
 
         buildCategoryDialog();
         buildingConfirmDialog(fragmentLayout);
+        buildColorPickerDialog();
+
 
         //setting a listener on the note category button
         noteCategoryButton.setOnClickListener(new View.OnClickListener(){
@@ -111,6 +171,7 @@ public class EditNoteFragment extends Fragment {
                 categoryAlertDialogObject.show();
             }
         });
+
 
         //setting a listener on the save button
         saveButton.setOnClickListener(new View.OnClickListener(){
@@ -129,10 +190,65 @@ public class EditNoteFragment extends Fragment {
         return fragmentLayout;
     }
 
+    private void openGallery(){
+        Intent gallery = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI);
+        startActivityForResult(gallery,PICK_IMAGE);
+    }
+    private void openCamera(){
+        Intent camera = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        if(camera.resolveActivity(getActivity().getPackageManager()) != null) {
+            File photoFile = null;
+            try {
+                photoFile = createImageFile();
+            } catch (IOException exception) {
+                Log.i(TAG, "IOException");
+            }
+            if(photoFile != null) {
+                camera.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(photoFile));
+                startActivityForResult(camera, CAMERA_REQUEST);
+            }
+        }
+
+    }
+    private File createImageFile() throws IOException {
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String imageFileName = "JPEG_" +timeStamp + "_";
+        File storageDirectory = Environment.getExternalStoragePublicDirectory(
+                Environment.DIRECTORY_PICTURES
+        );
+        File image = File.createTempFile(
+                imageFileName,
+                ".jpg",
+                storageDirectory
+        );
+
+        currentPhotoPath = "file:" + image.getAbsolutePath();
+        return image;
+    }
+
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState){
         super.onSaveInstanceState(savedInstanceState);
         savedInstanceState.putSerializable(categoryModified, savedNoteCategoryButton);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+
+        if (requestCode == PICK_IMAGE && resultCode == Activity.RESULT_OK) {
+            uri = data.getData();
+            imageView.setImageURI(uri);
+        }
+        else if (requestCode == CAMERA_REQUEST && resultCode == Activity.RESULT_OK) {
+            try{
+                bitmapImage = MediaStore.Images.Media.getBitmap(this.getActivity().getContentResolver(), Uri.parse(currentPhotoPath));
+            }
+            catch (IOException exception) {
+                exception.printStackTrace();
+            }
+        }
     }
 
     private void buildCategoryDialog() {
@@ -277,6 +393,7 @@ public class EditNoteFragment extends Fragment {
         dialogForConfirm = builderForConfirm.create();
     }
 
+
     public void saveNoteIntoFile(View v, String textToBeWrittenIntoFile){
         final Context context = getActivity().getApplicationContext();
         try {
@@ -315,33 +432,82 @@ public class EditNoteFragment extends Fragment {
 
     }
 
-    public void getTextFromNoteFile(){
+    public void getTextFromNoteFile() {
         final Context context = getActivity().getApplicationContext();
         try {
             InputStream inputStream = context.openFileInput(noteTextFile);
 
-            if(inputStream!=null){
+            if (inputStream != null) {
 
                 InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
                 BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
                 String string;
                 StringBuilder stringBuilder = new StringBuilder();
 
-                while((string=bufferedReader.readLine())!=null){
-                    stringBuilder.append(string+"\n");
+                while ((string = bufferedReader.readLine()) != null) {
+                    stringBuilder.append(string + "\n");
                 }
 
                 inputStream.close();
-                Log.d("OUTPUT",stringBuilder.toString());
+                Log.d("OUTPUT", stringBuilder.toString());
             }
 
-        }catch(FileNotFoundException e){
+        } catch (FileNotFoundException e) {
             Log.d("EXCEPTION: ", e.toString());
-        }
-
-        catch(Throwable throwable){
+        } catch (Throwable throwable) {
             Toast.makeText(context, "", Toast.LENGTH_SHORT).show();
         }
+    }
+
+    private void buildColorPickerDialog() {
+        //defining the color options we want to show in the menu
+        final String[] colorPicker = new String[]{"Grey", "Pink", "Blue", "White", "Orange"};
+
+
+        //now we will create an alert dialog window
+        final AlertDialog.Builder colorPickerBuilder = new AlertDialog.Builder(getActivity());
+        colorPickerBuilder.setTitle("Please pick a color");
+
+        colorPickerBuilder.setSingleChoiceItems(colorPicker, 0, new DialogInterface.OnClickListener() {// we have given 0 as we want grey to be default color for our notes
+            @Override
+            public void onClick(DialogInterface dialog, int selectColor) {
+
+
+                colorAlertDialogObject.cancel();// we will use this to dismiss our color menu.
+
+                switch (selectColor) {
+                    case 0:
+                        savedColorCategoryButton = Colors.ColorCategory.GREY;
+                        relativeLayout.setBackgroundColor(getResources().getColor(R.color.greyBackgroundColor));
+                        break;
+
+                    case 1:
+                        savedColorCategoryButton = Colors.ColorCategory.PINK;
+                        relativeLayout.setBackgroundColor(getResources().getColor(R.color.pinkBackgroundColor));
+                        break;
+
+                    case 2:
+                        savedColorCategoryButton = Colors.ColorCategory.BLUE;
+                        relativeLayout.setBackgroundColor(getResources().getColor(R.color.blueBackgroundColor));
+                        break;
+
+                    case 3:
+                        savedColorCategoryButton = Colors.ColorCategory.WHITE;
+                        relativeLayout.setBackgroundColor(getResources().getColor(R.color.whiteBackgroundColor));
+                        break;
+
+                    case 4:
+                        savedColorCategoryButton = Colors.ColorCategory.ORANGE;
+                        relativeLayout.setBackgroundColor(getResources().getColor(R.color.orangeBackgroundColor));
+                        break;
+                }
+
+
+            }
+
+        });
+        colorAlertDialogObject = colorPickerBuilder.create();//we will use this to create our alert dialog window
+
 
     }
 }
