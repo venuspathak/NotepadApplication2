@@ -21,10 +21,19 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <activity
             android:name=".ActivityOfNoteDetails"
             android:parentActivityName=".MainActivity"
-            android:label="@string/edit_Note_Fragment_Title"></activity>
+            android:label="@string/edit_Note_Fragment_Title">
+        </activity>
+
+        <activity
+            android:name=".ViewNoteActivity"
+            android:parentActivityName=".MainActivity"
+            android:label="@string/view_Note_Fragment_Title">
+        </activity>
+
     </application>
 
 </manifest>

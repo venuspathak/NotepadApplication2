@@ -5,6 +5,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Menu;
 
 public class ActivityOfNoteDetails extends AppCompatActivity {
 
@@ -15,6 +16,13 @@ public class ActivityOfNoteDetails extends AppCompatActivity {
         setContentView(R.layout.activity_of_note_details);
 
         createAndAddAFragment();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        //Inflate the emnu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_edit,menu);
+        return true;
     }
 
     private void createAndAddAFragment() {
