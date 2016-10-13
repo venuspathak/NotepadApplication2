@@ -8,9 +8,11 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.net.Uri;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
@@ -27,9 +29,11 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
@@ -52,11 +56,12 @@ public class EditNoteFragment extends Fragment {
     private Note.Category noteCategoryFinal;
     private static final int PICK_IMAGE = 100;
     private ImageView imageView;
-    private ImageButton editNoteGallery;
+    private ImageButton editNoteGallery, editNoteCamera;
     private RelativeLayout relativeLayout;
     private String userHasChosen;
     Uri uri;
     private static int LOAD_CHOSEN_IMAGE = 1;
+    private static int REQUEST_CAMERA = 0;
     private static final int EXTERNAL_STORAGE_REQUEST = 1;
     private String finalImagePath;
     private static String[] PERMISSIONS_STORAGE = {
@@ -93,6 +98,7 @@ public class EditNoteFragment extends Fragment {
         noteCategoryButton = (ImageButton) fragmentLayout.findViewById(R.id.editNoteButtonImage);
         Button saveButton = (Button) fragmentLayout.findViewById(R.id.saveNoteButton);
         imageView = (ImageView) fragmentLayout.findViewById(R.id.imageView);
+        editNoteCamera = (ImageButton) fragmentLayout.findViewById(R.id.editNoteCamera);
         noteColorCategoryButton = (ImageButton)fragmentLayout.findViewById(R.id.colorPicker);
         editNoteGallery = (ImageButton) fragmentLayout.findViewById(R.id.editNoteGallery);
         relativeLayout = (RelativeLayout) fragmentLayout.findViewById(R.id.backGroundColor);
@@ -149,6 +155,14 @@ public class EditNoteFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 galleryIntent(v);
+            }
+        });
+
+        //setting listerner on the camera button
+        editNoteCamera.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                cameraIntent();
             }
         });
 
@@ -440,6 +454,10 @@ public class EditNoteFragment extends Fragment {
         startActivityForResult(galleryIntent, LOAD_CHOSEN_IMAGE);
 
     }
+    public void cameraIntent(){
+        Intent cameraIntent =  new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        startActivityForResult(cameraIntent, REQUEST_CAMERA);
+    }
 
     public static void verifyNecessaryStoragePermissionsForImages(Activity activity) {
         //Checking if we have write external storage permissions
@@ -474,13 +492,57 @@ public class EditNoteFragment extends Fragment {
 
                 imageView.setImageBitmap(BitmapFactory.decodeFile(finalImagePath));
 
-            } else {
+            } else if(requestCode == REQUEST_CAMERA && resultCode == Activity.RESULT_OK && data!= null){
+                {   /*
+                    Bitmap thumbnail = (Bitmap) data.getExtras().get("data");
+                    ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+                    thumbnail.compress(Bitmap.CompressFormat.JPEG, 90, bytes);
+
+
+
+                    File destination = new File(Environment.getExternalStorageDirectory(),
+                            System.currentTimeMillis() + ".jpg");
+
+                    FileOutputStream fo;
+                    try {
+                        destination.createNewFile();
+                        fo = new FileOutputStream(destination);
+                        fo.write(bytes.toByteArray());
+                        fo.close();
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+
+                    imageView.setImageBitmap(thumbnail);
+                    */
+                    Bitmap cameraPhoto = (Bitmap) data.getExtras().get("data");
+                    imageView.setImageBitmap(cameraPhoto);
+
+                    Uri uri = getCameraImageUri(getContext(), cameraPhoto);
+
+                    Cursor cursor = getActivity().getContentResolver().query(uri, null, null, null, null);
+                    cursor.moveToFirst();
+                    int column_index = cursor
+                            .getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+
+                    finalImagePath = cursor.getString(column_index);
+
+                }
+            } else
                 Toast.makeText(getActivity(), "You haven't picked an image", Toast.LENGTH_LONG).show();
-            }
         } catch (Exception e) {
             Toast.makeText(getActivity(), "Something is wrong", Toast.LENGTH_LONG).show();
         }
 
     }
+    public Uri getCameraImageUri(Context context, Bitmap image) {
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        image.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream);
+        finalImagePath = MediaStore.Images.Media.insertImage(context.getContentResolver(), image, "Camera Image", null);
+        return Uri.parse(finalImagePath);
+    }
+
 }
 

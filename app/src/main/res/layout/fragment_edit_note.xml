@@ -82,18 +82,27 @@
     <ImageButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:srcCompat="?android:attr/textSelectHandle"
-        android:id="@+id/colorPicker"
-        android:layout_alignParentBottom="true"
+        app:srcCompat="@android:drawable/ic_menu_gallery"
+        android:id="@+id/editNoteGallery"
+        android:layout_alignTop="@+id/colorPicker"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentBottom="true" />
+
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:srcCompat = "@android:drawable/ic_menu_camera"
+        android:id="@+id/editNoteCamera"
+        android:layout_alignTop="@+id/editNoteGallery"
         android:layout_toEndOf="@+id/editNoteGallery" />
 
     <ImageButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:srcCompat="@android:drawable/ic_menu_gallery"
-        android:id="@+id/editNoteGallery"
-        android:layout_alignTop="@+id/colorPicker"
-        android:layout_alignParentStart="true" />
+        app:srcCompat="?android:attr/textSelectHandle"
+        android:id="@+id/colorPicker"
+        android:layout_alignParentBottom="true"
+        android:layout_toEndOf="@+id/editNoteCamera" />
 
 
 </RelativeLayout>
