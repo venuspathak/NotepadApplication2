@@ -1,8 +1,5 @@
 package com.mobilecommerce.notepadapplication;
 
-import android.content.res.ColorStateList;
-import android.graphics.Color;
-
 /**
  * Created by Shivu on 2016-10-10.
  */

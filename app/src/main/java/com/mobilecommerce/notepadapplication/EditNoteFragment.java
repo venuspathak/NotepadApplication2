@@ -1,17 +1,19 @@
 package com.mobilecommerce.notepadapplication;
 
 
+import android.Manifest;
+import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.database.Cursor;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.os.Environment;
-import android.app.Activity;
-import android.graphics.Bitmap;
 import android.net.Uri;
 import android.provider.MediaStore;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
-import android.support.v4.os.EnvironmentCompat;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -25,18 +27,12 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.FileWriter;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
-import java.io.File;
-import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 
 /**
@@ -47,23 +43,26 @@ public class EditNoteFragment extends Fragment {
     private ImageButton noteCategoryButton, noteColorCategoryButton;
     private Note.Category savedNoteCategoryButton;
     private Colors.ColorCategory savedColorCategoryButton;
-    public AlertDialog categoryAlertDialogObject, dialogForConfirm, colorAlertDialogObject;
+    public AlertDialog categoryAlertDialogObject, dialogForConfirm, colorAlertDialogObject, optionsAlertDialogObject;
     private EditText title, body;
     private static final String categoryModified = "Modified Category";
     public Boolean newNote = false;
     private static final String noteTextFile = "noteTextFile10.txt";
     private EditText textEditor;
     private Note.Category noteCategoryFinal;
-
     private static final int PICK_IMAGE = 100;
-    private static final int CAMERA_REQUEST = 1;
-    private ImageView editNoteGallery, imageView, editNoteCamera;
-    private Bitmap bitmapImage;
-    private String currentPhotoPath;
-    private static final String TAG = "";
+    private ImageView imageView;
+    private ImageButton editNoteGallery;
     private RelativeLayout relativeLayout;
-
+    private String userHasChosen;
     Uri uri;
+    private static int LOAD_CHOSEN_IMAGE = 1;
+    private static final int EXTERNAL_STORAGE_REQUEST = 1;
+    private String finalImagePath;
+    private static String[] PERMISSIONS_STORAGE = {
+            Manifest.permission.READ_EXTERNAL_STORAGE,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE
+    };
 
 
     public EditNoteFragment() {
@@ -94,26 +93,10 @@ public class EditNoteFragment extends Fragment {
         noteCategoryButton = (ImageButton) fragmentLayout.findViewById(R.id.editNoteButtonImage);
         Button saveButton = (Button) fragmentLayout.findViewById(R.id.saveNoteButton);
         imageView = (ImageView) fragmentLayout.findViewById(R.id.imageView);
-        editNoteGallery = (ImageView)fragmentLayout.findViewById(R.id.editNoteGallery);
         noteColorCategoryButton = (ImageButton)fragmentLayout.findViewById(R.id.colorPicker);
-        editNoteCamera = (ImageView) fragmentLayout.findViewById(R.id.editNoteCamera);
+        editNoteGallery = (ImageButton) fragmentLayout.findViewById(R.id.editNoteGallery);
         relativeLayout = (RelativeLayout) fragmentLayout.findViewById(R.id.backGroundColor);
 
-        //Setting onClick Listerner on Gallery Button
-        editNoteGallery.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                openGallery();
-            }
-        });
-
-        //Setting onClick Listerner on Camera Button
-        editNoteCamera.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                openCamera();
-            }
-        });
 
 
         //Seting onCLick Listerner on ColorCategory Button
@@ -123,10 +106,6 @@ public class EditNoteFragment extends Fragment {
                 colorAlertDialogObject.show();
             }
         });
-
-
-
-
 
         //populating with data. We are using this to actually populate the fragment with our existing note data.
         Intent intent = getActivity().getIntent();
@@ -153,6 +132,8 @@ public class EditNoteFragment extends Fragment {
         buildCategoryDialog();
         buildingConfirmDialog(fragmentLayout);
         buildColorPickerDialog();
+        verifyNecessaryStoragePermissionsForImages(getActivity());
+        //buildCameraGalleryOptionsDialog();
 
 
         //setting a listener on the note category button
@@ -163,7 +144,13 @@ public class EditNoteFragment extends Fragment {
                 categoryAlertDialogObject.show();
             }
         });
-
+        //setting listerner on the gallery button
+        editNoteGallery.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                galleryIntent(v);
+            }
+        });
 
         //setting a listener on the save button
         saveButton.setOnClickListener(new View.OnClickListener(){
@@ -182,66 +169,12 @@ public class EditNoteFragment extends Fragment {
         return fragmentLayout;
     }
 
-    private void openGallery(){
-        Intent gallery = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI);
-        startActivityForResult(gallery,PICK_IMAGE);
-    }
-    private void openCamera(){
-        Intent camera = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        if(camera.resolveActivity(getActivity().getPackageManager()) != null) {
-            File photoFile = null;
-            try {
-                photoFile = createImageFile();
-            } catch (IOException exception) {
-                Log.i(TAG, "IOException");
-            }
-            if(photoFile != null) {
-                camera.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(photoFile));
-                startActivityForResult(camera, CAMERA_REQUEST);
-            }
-        }
-
-    }
-    private File createImageFile() throws IOException {
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-        String imageFileName = "JPEG_" +timeStamp + "_";
-        File storageDirectory = Environment.getExternalStoragePublicDirectory(
-                Environment.DIRECTORY_PICTURES
-        );
-        File image = File.createTempFile(
-                imageFileName,
-                ".jpg",
-                storageDirectory
-        );
-
-        currentPhotoPath = "file:" + image.getAbsolutePath();
-        return image;
-    }
-
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState){
         super.onSaveInstanceState(savedInstanceState);
         savedInstanceState.putSerializable(categoryModified, savedNoteCategoryButton);
     }
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-
-        if (requestCode == PICK_IMAGE && resultCode == Activity.RESULT_OK) {
-            uri = data.getData();
-            imageView.setImageURI(uri);
-        }
-        else if (requestCode == CAMERA_REQUEST && resultCode == Activity.RESULT_OK) {
-            try{
-                bitmapImage = MediaStore.Images.Media.getBitmap(this.getActivity().getContentResolver(), Uri.parse(currentPhotoPath));
-            }
-            catch (IOException exception) {
-                exception.printStackTrace();
-            }
-        }
-    }
 
     private void buildCategoryDialog() {
 
@@ -416,7 +349,7 @@ public class EditNoteFragment extends Fragment {
             //          bufferedWriter.write(textToBeWrittenIntoFile);
             //        bufferedWriter.close();
 
-//            MediaScannerConnection.scanFile(context, new String[]{file.toString()}, null, null);
+//           MediaScannerConnection.scanFile(context, new String[]{file.toString()}, null, null);
 
         }catch(Throwable throwable){
             Toast.makeText(context, "EXCEPTION: "+throwable.toString(), Toast.LENGTH_LONG).show();
@@ -499,7 +432,55 @@ public class EditNoteFragment extends Fragment {
 
         });
         colorAlertDialogObject = colorPickerBuilder.create();//we will use this to create our alert dialog window
+    }
 
+
+    public void galleryIntent(View view) {
+        Intent galleryIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        startActivityForResult(galleryIntent, LOAD_CHOSEN_IMAGE);
+
+    }
+
+    public static void verifyNecessaryStoragePermissionsForImages(Activity activity) {
+        //Checking if we have write external storage permissions
+        int permissions = ActivityCompat.checkSelfPermission(activity, Manifest.permission.WRITE_EXTERNAL_STORAGE);
+
+        if(permissions != PackageManager.PERMISSION_GRANTED) {
+            // We don't have permissions therefore getting permissions from the user
+            ActivityCompat.requestPermissions(activity,PERMISSIONS_STORAGE,EXTERNAL_STORAGE_REQUEST);
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        try {
+            if (requestCode == LOAD_CHOSEN_IMAGE && resultCode == Activity.RESULT_OK && data != null) {
+
+                Uri selectedImage = data.getData();
+                Log.d("Uri", selectedImage.toString());
+
+                String[] filePathColumn = {MediaStore.Images.Media.DATA};
+
+
+                Cursor cursor = getActivity().getContentResolver().query(selectedImage, filePathColumn, null, null, null);
+                int column_index = cursor
+                        .getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+                cursor.moveToFirst();
+
+
+                finalImagePath = cursor.getString(column_index);
+                cursor.close();
+
+                imageView.setImageBitmap(BitmapFactory.decodeFile(finalImagePath));
+
+            } else {
+                Toast.makeText(getActivity(), "You haven't picked an image", Toast.LENGTH_LONG).show();
+            }
+        } catch (Exception e) {
+            Toast.makeText(getActivity(), "Something is wrong", Toast.LENGTH_LONG).show();
+        }
 
     }
 }
+
