@@ -3,11 +3,19 @@ package com.mobilecommerce.notepadapplication;
 import android.content.Intent;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.app.ShareCompat;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.ShareActionProvider;
+import android.util.Log;
 import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 
 public class ViewNoteActivity extends AppCompatActivity {
+
+    private ShareActionProvider shareActionProvider=null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -20,8 +28,30 @@ public class ViewNoteActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         //Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_view,menu);
+
+        menu.clear();
+        MenuInflater menuInflater = getMenuInflater();
+        menuInflater.inflate(R.menu.menu_view,menu);
+        MenuItem menuItem = menu.findItem(R.id.action_share_note);
+
+        //Getting SharedActionProvider
+        shareActionProvider = (ShareActionProvider) MenuItemCompat.getActionProvider(menuItem);
+        shareActionProvider.setShareHistoryFileName("share_history.xml");
+
+        Intent intentForShare = new Intent(Intent.ACTION_SEND);
+        intentForShare.setType("text/plain");
+        intentForShare.putExtra(Intent.EXTRA_TEXT, "text to share"); // Here the note shared will be written
+        setIntentForShare("text to share", intentForShare);
+
         return true;
+
+    }
+
+
+    private void setIntentForShare(String stringToShare, Intent intentForShare){
+        if(shareActionProvider!=null) {
+            shareActionProvider.setShareIntent(intentForShare);
+        }
     }
 
     private void createAndAddAFragment() {
@@ -36,6 +66,7 @@ public class ViewNoteActivity extends AppCompatActivity {
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
                 ViewNoteFragment viewNoteFragment = new ViewNoteFragment();
+               // viewNoteFragment.setHasOptionsMenu(true);
                 setTitle(R.string.view_Note_Fragment_Title);
                 fragmentTransaction.add
                         (R.id.activity_view_note, viewNoteFragment, "VIEW_NOTE_FRAGMENT");
