@@ -12,14 +12,9 @@ import android.net.Uri;
 import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
 import android.support.v4.os.EnvironmentCompat;
-import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.widget.ShareActionProvider;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -67,8 +62,6 @@ public class EditNoteFragment extends Fragment {
     private String currentPhotoPath;
     private static final String TAG = "";
     private RelativeLayout relativeLayout;
-
-    private ShareActionProvider shareActionProvider=null;
 
     Uri uri;
 
@@ -132,6 +125,9 @@ public class EditNoteFragment extends Fragment {
         });
 
 
+
+
+
         //populating with data. We are using this to actually populate the fragment with our existing note data.
         Intent intent = getActivity().getIntent();
         title.setText(intent.getExtras().getString(MainActivity.Second_Note_Title, "")); // IF it can't find the keys since it is a new note, create a new note
@@ -185,37 +181,7 @@ public class EditNoteFragment extends Fragment {
 
         return fragmentLayout;
     }
-/*
-    @Override // onCreateOptionsMenu is used to implement functionality on menu items
-    // The following method has been created to add share functionality
-    public void onCreateOptionsMenu(Menu menu, MenuInflater menuInflater){
-        // Menu is inflated
-        //menuInflater.inflate(R.menu.menu_edit, menu);
-        MenuItem menuItem = menu.findItem(R.id.action_share_note);
 
-        //Getting SharedActionProvider
-        shareActionProvider = (ShareActionProvider) menuItem.getActionProvider();
-        setIntentForShare("text to share");
-
-
-
-
-
-            super.onCreateOptionsMenu(menu, menuInflater);
-        }
-    }
-
-    private void setIntentForShare(String stringToShare){
-        if(shareActionProvider!=null) {
-            Intent intentForShare = new Intent(Intent.ACTION_SEND);
-            //Intent intentForShare = new Intent();
-            // intentForShare.setAction(Intent.ACTION_SEND);
-            intentForShare.setType("text/plain");
-            intentForShare.putExtra(Intent.EXTRA_TEXT, stringToShare); // Here the note shared will be written
-            shareActionProvider.setShareIntent(intentForShare);
-        }
-    }
-*/
     private void openGallery(){
         Intent gallery = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI);
         startActivityForResult(gallery,PICK_IMAGE);
