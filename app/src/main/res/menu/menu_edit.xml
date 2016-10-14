@@ -4,7 +4,7 @@
     tools:context="com.mobilecommerce.notepadapplication.MainActivity">
 
     <!-- Lowest category order plus ifRoom means it will be displayed as a button -->
-
+<!--
     <item
         android:id="@+id/action_favorite"
         android:icon="@drawable/bold"
@@ -23,7 +23,7 @@
         android:title="UNDERLINE"
         android:icon="@drawable/bold"
         app:showAsAction="ifRoom" />
-
+-->
 
     <!-- Never means never display as a button but as an item irrespective of the category order -->
 

@@ -10,11 +10,20 @@
     <string name="edit_Note_Fragment_Title">EDITING NOTE</string>
     <string name="add_Note_Fragment_Title">ADDING NOTE</string>
 
-    <!-- Main list Long Click Context Menu-->
-    <string name="edit_menu">Edit Menu</string>
-
     <!-- Save Button on Edit Fragment-->
     <string name="save_button">Save Me!</string>
+
+    <!-- Main list Long Click Context Menu-->
+    <string name="edit_menu">Edit Menu</string>
+    <string name="delete_menu">Delete Menu</string>
+
+    <!-- Share Button on Edit and View Fragment-->
+    <string name="share_button">SHARE</string>
+
+    <!-- Bold, Italic and Underline on three dots section-->
+    <string name="action_bold">MAKE IT BOLD</string>
+    <string name="action_italics">ITALICS</string>
+    <string name="action_underline">UNDERLINE IT</string>
 
 
 </resources>
