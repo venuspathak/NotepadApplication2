@@ -35,7 +35,7 @@ public class ViewNoteActivity extends AppCompatActivity {
 
         //Getting SharedActionProvider
         shareActionProvider = (ShareActionProvider) MenuItemCompat.getActionProvider(menuItem);
-        shareActionProvider.setShareHistoryFileName("share_history.xml");
+       // shareActionProvider.setShareHistoryFileName("share_history.xml");
 
         Intent intentForShare = new Intent(Intent.ACTION_SEND);
         intentForShare.setType("text/plain");
