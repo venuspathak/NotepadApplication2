@@ -4,6 +4,8 @@ package com.mobilecommerce.notepadapplication;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Paint;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.Environment;
 import android.app.Activity;
@@ -15,6 +17,9 @@ import android.support.v4.os.EnvironmentCompat;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -37,6 +42,9 @@ import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Scanner;
+
+import static com.mobilecommerce.notepadapplication.MainActivityListFragment.noteTitleToBeUsedByAllInEdit;
 
 
 /**
@@ -51,7 +59,7 @@ public class EditNoteFragment extends Fragment {
     private EditText title, body;
     private static final String categoryModified = "Modified Category";
     public Boolean newNote = false;
-    private static final String noteTextFile = "noteTextFile10.txt";
+    private static final String noteTextFile = "noteTextFile15.txt";
     private EditText textEditor;
     private Note.Category noteCategoryFinal;
 
@@ -62,6 +70,9 @@ public class EditNoteFragment extends Fragment {
     private String currentPhotoPath;
     private static final String TAG = "";
     private RelativeLayout relativeLayout;
+    private static int identifierAddOrEdit=0;
+    private static String trackForNewNote = "";
+    private static MenuItem menuBold, menuItalic, menuUnderline;
 
     Uri uri;
 
@@ -70,15 +81,54 @@ public class EditNoteFragment extends Fragment {
         // Required empty public constructor
     }
 
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater menuInflater) {
+        menu.clear();
+        menuInflater.inflate(R.menu.menu_edit,menu);
+        menuBold = menu.findItem(R.id.action_bold_note);
+        menuItalic = menu.findItem(R.id.action_italics_note);
+        menuUnderline = menu.findItem(R.id.action_underline_note);
+
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+
+            case R.id.action_bold_note:
+                title.setTypeface(title.getTypeface(), Typeface.BOLD);
+                body.setTypeface(body.getTypeface(), Typeface.BOLD);
+                return true;
+
+            case R.id.action_italics_note:
+                title.setTypeface(title.getTypeface(), Typeface.ITALIC);
+                body.setTypeface(body.getTypeface(), Typeface.ITALIC);
+                return true;
+
+            case R.id.action_underline_note:
+                title.setPaintFlags(title.getPaintFlags() |   Paint.UNDERLINE_TEXT_FLAG);
+                body.setPaintFlags(body.getPaintFlags() |   Paint.UNDERLINE_TEXT_FLAG);
+                return true;
+
+            default:
+                break;
+        }
+
+        return false;
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
+        setHasOptionsMenu(true);
+
         // Grabs the bundle for new note
         Bundle bundle = this.getArguments();
         if(bundle!=null){
             newNote = bundle.getBoolean(ActivityOfNoteDetails.NEW_NOTE, false);
+            identifierAddOrEdit = 1;
+            trackForNewNote = "new";
         }
 
         if(savedInstanceState!=null){
@@ -99,7 +149,7 @@ public class EditNoteFragment extends Fragment {
         editNoteCamera = (ImageView) fragmentLayout.findViewById(R.id.editNoteCamera);
         relativeLayout = (RelativeLayout) fragmentLayout.findViewById(R.id.backGroundColor);
 
-        //Setting onClick Listerner on Gallery Button
+        //Setting onClick Listener on Gallery Button
         editNoteGallery.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -107,7 +157,7 @@ public class EditNoteFragment extends Fragment {
             }
         });
 
-        //Setting onClick Listerner on Camera Button
+        //Setting onClick Listener on Camera Button
         editNoteCamera.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -116,7 +166,7 @@ public class EditNoteFragment extends Fragment {
         });
 
 
-        //Seting onCLick Listerner on ColorCategory Button
+        //Setting onCLick Listener on ColorCategory Button
         noteColorCategoryButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -124,9 +174,30 @@ public class EditNoteFragment extends Fragment {
             }
         });
 
+/*
+        //setting a listener on the bold menu item
+        menuBold.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                title.setTypeface(title.getTypeface(), Typeface.BOLD);
+                body.setTypeface(body.getTypeface(), Typeface.BOLD);
+                return true;
+            }
+        });
 
 
+        //setting a listener on the italics menu item
+        menuItalic.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
 
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                title.setTypeface(title.getTypeface(), Typeface.ITALIC);
+                body.setTypeface(body.getTypeface(), Typeface.ITALIC);
+                return true;
+            }
+        });
+*/
 
         //populating with data. We are using this to actually populate the fragment with our existing note data.
         Intent intent = getActivity().getIntent();
@@ -144,16 +215,10 @@ public class EditNoteFragment extends Fragment {
            // noteCategoryFinal=noteCategory; // This has been done to set the global variable with the modified category so that
             // it can be accessed in the method for writing into file
         }
-    //    else if(newNote){
-      //      Note.Category noteCategory = (Note.Category) intent.getSerializableExtra(MainActivity.);
-        //    savedNoteCategoryButton = noteCategory;
-          //  noteCategoryButton.setImageResource(Note.categoryToDrawble(noteCategory));
-        //}
 
         buildCategoryDialog();
         buildingConfirmDialog(fragmentLayout);
         buildColorPickerDialog();
-
 
         //setting a listener on the note category button
         noteCategoryButton.setOnClickListener(new View.OnClickListener(){
@@ -337,34 +402,28 @@ public class EditNoteFragment extends Fragment {
         builderForConfirm.setPositiveButton("CONFIRM", new DialogInterface.OnClickListener(){
             @Override
             public void onClick(DialogInterface dialog, int which){
-                // Save into database here
-                Log.d("Save Note", "Note title: "+ title.getText()+ "Note message: "+body.getText()+ "Note category: "+ savedNoteCategoryButton); // Save Note is the key
-                // title.setText(title.getText());
-                //body.setText(body.getText());
+                // Save into file here
 
-                // final String changedTitle = title.getText().toString();
-                //final String changedBody = body.getText().toString();
-
-                //title.setText(changedTitle, TextView.BufferType.EDITABLE);
-                // body.setText(changedBody, TextView.BufferType.EDITABLE);
-
-                // savedNoteCategoryButton
-
-                // title.setText("ABC");
-
-                String notetitle = title.getText().toString();
-                String noteBody = body.getText().toString();
-                String noteCategory;
+                String newNoteTitle = title.getText().toString(); // new is for both edited as well as new one
+                String newNoteBody = body.getText().toString();
+                String newNoteCategory;
 
                 if(savedNoteCategoryButton==null)
-                    noteCategory = "DEFAULT" ;
+                    newNoteCategory = "DEFAULT" ;
                 else
-                    noteCategory = savedNoteCategoryButton.toString();
+                    newNoteCategory = savedNoteCategoryButton.toString();
 
-                String textToBeWrittenIntoFile = notetitle+","+noteBody+","+noteCategory;
+                String textToBeWrittenIntoFile = newNoteTitle+","+newNoteBody+","+newNoteCategory;
+                String identifierTitleAddOrEdit="";
 
-                saveNoteIntoFile(view, textToBeWrittenIntoFile);
-                //getTextFromNoteFile();
+                if(identifierAddOrEdit==0){ // This means note is being edited
+                    identifierTitleAddOrEdit = noteTitleToBeUsedByAllInEdit;
+                }else if(identifierAddOrEdit==1){ // This means note is being added
+                    identifierTitleAddOrEdit = "NULL"; // When new note is being added, note title before edit does not make sense, hence any value can be put here
+                }
+
+                saveNoteIntoFile(view, textToBeWrittenIntoFile, identifierAddOrEdit, identifierTitleAddOrEdit);
+
                 Intent intent = new Intent(getActivity(), MainActivity.class);
                 startActivity(intent);
             }
@@ -386,38 +445,39 @@ public class EditNoteFragment extends Fragment {
     }
 
 
-    public void saveNoteIntoFile(View v, String textToBeWrittenIntoFile){
+    public void saveNoteIntoFile(View v, String textToBeWrittenIntoFile, int identifierAddOrEdit, String titleToMaintainUniqueness){
         final Context context = getActivity().getApplicationContext();
         try {
-            //  File file = new File(context.getExternalFilesDir(null),noteTextFile);
             File file = new File(noteTextFile);
+            Scanner scanner=new Scanner(noteTextFile);
 
-            //if (file.exists())
-            // {
             FileOutputStream fileOutputStream = context.openFileOutput(noteTextFile, Context.MODE_APPEND);
             OutputStreamWriter outputStreamWriter = new OutputStreamWriter(fileOutputStream);
-            outputStreamWriter.write(textToBeWrittenIntoFile);
-            outputStreamWriter.write("\n");
+
+            if(identifierAddOrEdit==0) { // Editing an already existing note
+                String editedLine="";
+
+                while(scanner.hasNextLine()){
+                    Log.d("NEXT LINE", scanner.nextLine());
+                    if(scanner.nextLine().contains(titleToMaintainUniqueness)){
+                        String lineContainingTitle = scanner.nextLine();
+                        Boolean a =lineContainingTitle.contains(titleToMaintainUniqueness);
+                        Log.d("GOD", a.toString());
+                        editedLine = lineContainingTitle.replace(lineContainingTitle, textToBeWrittenIntoFile);
+                        Log.d("edited line", editedLine);
+                        break;
+                    }
+                }
+                outputStreamWriter.write(editedLine);
+                outputStreamWriter.write("\n");
+            }else if (identifierAddOrEdit==1){ // Adding a new note
+                outputStreamWriter.write(textToBeWrittenIntoFile);
+                outputStreamWriter.write("\n");
+            }
+
             outputStreamWriter.close();
 
-            //}else{
-
-            //  OutputStreamWriter outputStreamWriter = new OutputStreamWriter(context.openFileOutput(noteTextFile, 0));
-            //outputStreamWriter.write(textToBeWrittenIntoFile);
-            //outputStreamWriter.close();
-            // }
             Toast.makeText(context, "THE NOTE HAS BEEN SAVED.", Toast.LENGTH_LONG).show();
-
-
-            //  if(!file.exists())
-            //     file.createNewFile();
-
-//            BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(file, true /*append*/));
-            //          bufferedWriter.write(textToBeWrittenIntoFile);
-            //        bufferedWriter.close();
-
-//            MediaScannerConnection.scanFile(context, new String[]{file.toString()}, null, null);
-
         }catch(Throwable throwable){
             Toast.makeText(context, "EXCEPTION: "+throwable.toString(), Toast.LENGTH_LONG).show();
         }

@@ -25,6 +25,25 @@
         app:showAsAction="ifRoom" />
 -->
 
+
+    <item
+        android:id="@+id/action_bold_note"
+        android:orderInCategory="100"
+        android:title="@string/action_bold"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_italics_note"
+        android:orderInCategory="100"
+        android:title="@string/action_italics"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_underline_note"
+        android:orderInCategory="100"
+        android:title="@string/action_underline"
+        app:showAsAction="never" />
+
     <!-- Never means never display as a button but as an item irrespective of the category order -->
 
 </menu>

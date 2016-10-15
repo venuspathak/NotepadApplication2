@@ -28,9 +28,10 @@ import android.view.MenuInflater;
 
         private ArrayList<Note> notes;
         private AdapterForNote adapterForNote;
-        private static final String noteTextFile = "noteTextFile10.txt";
+        private static final String noteTextFile = "noteTextFile15.txt";
         private String[] rowsOfNotes;
-        private String[][] entireNote = new String[10][];;
+        private String[][] entireNote = new String[10][];
+        public static String noteTitleToBeUsedByAllInEdit ="";
 
 
         public void onActivityCreated(Bundle savedInstance) {
@@ -119,6 +120,8 @@ import android.view.MenuInflater;
               note such as its ID,Category,Title and Body */
 
             Note note = (Note) getListAdapter().getItem(position);
+            noteTitleToBeUsedByAllInEdit = note.getTitle();
+            Log.d("GOD", noteTitleToBeUsedByAllInEdit);
 
             Intent intent = new Intent(getActivity(),ActivityOfNoteDetails.class);
             intent.putExtra(MainActivity.Second_Note_Id, note.getNoteId());
@@ -135,6 +138,7 @@ import android.view.MenuInflater;
 
                 case EDIT:
                     intent.putExtra(MainActivity.Second_Note_Fragment_To_Load, MainActivity.FragmentToLoad.EDIT);
+
                     break;
             }
 
@@ -195,11 +199,6 @@ import android.view.MenuInflater;
                                 category = Note.Category.SHOPPING;
                             else if(entireNote[noteParts][2].equals("THOUGHTS"))
                                 category = Note.Category.THOUGHTS;
-
-                            //Log.d("LENGTH OF ARRAY", String.valueOf(rowsOfNotes.length));
-                            //Log.d("TITLE: " + (noteParts + 1), entireNote[noteParts][0]);
-                            //Log.d("BODY: " + (noteParts + 1), entireNote[noteParts][1]);
-                            //Log.d("CATEGORY: " + (noteParts + 1), entireNote[noteParts][2]);
 
                             notes.add(new Note(entireNote[noteParts][0],entireNote[noteParts][1],category));
                         }
