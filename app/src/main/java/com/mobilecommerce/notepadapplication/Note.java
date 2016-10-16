@@ -1,26 +1,24 @@
 
 package com.mobilecommerce.notepadapplication;
 
-
-import android.view.View;
-
-import java.io.InputStream;
-
 public class Note {
 
     private String noteTitle, noteDescription;
     private long noteId, dateCreated;
     private Category noteCategory;
+    private ColorCategory noteColorCategory;
 
 
     public enum Category {PERSONAL, FAMILY, SCHOOL, BILL, FOOD, DEFAULT, PARTY, SHOPPING, THOUGHTS }
+    public enum ColorCategory {GREY, PINK, BLUE, WHITE, ORANGE}
 
-    public Note(String noteTitle, String noteDescription, Category noteCategory) {
+    public Note(String noteTitle, String noteDescription, Category noteCategory, ColorCategory noteColorCategory) {
         this.noteTitle = noteTitle;
         this.noteDescription = noteDescription;
         this.noteCategory = noteCategory;
         this.noteId = noteId;
         this.dateCreated = dateCreated;
+        this.noteColorCategory = noteColorCategory;
     }
 
     public String getTitle() {
@@ -39,19 +37,24 @@ public class Note {
         return noteId;
     }
 
+    public ColorCategory getColorCategory(){
+        return noteColorCategory;
+    }
+
+
     public long getDateCreated() {
         return dateCreated;
     }
 
     public String toString() {
-        return "ID:" + noteId + "Title" + noteTitle + "Description" + noteDescription + "IconID" + noteCategory.name() + "Date: " + dateCreated;
+        return "ID:" + noteId + "Title" + noteTitle + "Description" + noteDescription + "IconID" + noteCategory.name() +"Color"+noteColorCategory.name()+ "Date: " + dateCreated;
     }
 
-    public int getAssociatedDrawble() {
-        return categoryToDrawble(noteCategory);
+    public int getAssociatedDrawbleCategory() {
+        return categoryToDrawbleCategory(noteCategory);
     }
 
-    public static int categoryToDrawble(Category noteCategory) {
+    public static int categoryToDrawbleCategory(Category noteCategory) {
         switch (noteCategory) {
 
             case FAMILY:
@@ -83,7 +86,42 @@ public class Note {
 
 
         }
-        return categoryToDrawble(noteCategory);
+        return categoryToDrawbleCategory(noteCategory);
+    }
+
+
+    private ColorCategory backgroundColor;
+
+    public void ColorCategory(ColorCategory backgroundColor) {
+        this.backgroundColor = backgroundColor;
+    }
+
+    public ColorCategory getBackgroundColor(){
+        return backgroundColor;
+    }
+    public int getAssociatedDrawbleColorCategory() {
+        return categoryToBackgroundColor(backgroundColor);
+    }
+
+    public static int categoryToBackgroundColor(ColorCategory backgroundColor){
+        switch (backgroundColor) {
+            case GREY:
+                return R.color.greyBackgroundColor;
+
+            case PINK:
+                return R.color.pinkBackgroundColor;
+
+            case WHITE:
+                return R.color.whiteBackgroundColor;
+
+            case ORANGE:
+                return R.color.orangeBackgroundColor;
+
+            case BLUE:
+                return R.color.blueBackgroundColor;
+
+        }
+        return categoryToBackgroundColor(backgroundColor);
     }
 
 

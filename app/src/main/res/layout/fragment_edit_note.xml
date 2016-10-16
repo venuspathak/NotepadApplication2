@@ -93,17 +93,16 @@
         app:srcCompat="@android:drawable/ic_menu_gallery"
         android:id="@+id/editNoteGallery"
         android:layout_alignParentBottom="true"
-        android:layout_toStartOf="@+id/noteScrollView" />
+        android:layout_toEndOf="@+id/editNoteCamera" />
 
     <ImageButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:srcCompat="?android:attr/textSelectHandle"
-        android:layout_marginStart="20dp"
         android:id="@+id/colorPicker"
-        android:layout_alignTop="@+id/editNoteGallery"
+        android:layout_alignParentBottom="true"
         android:layout_toEndOf="@+id/editNoteGallery"
-        android:layout_alignParentBottom="true" />
+        android:layout_alignTop="@+id/editNoteGallery" />
 
 
 

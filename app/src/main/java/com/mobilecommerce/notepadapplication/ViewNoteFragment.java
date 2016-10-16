@@ -37,7 +37,7 @@ public class ViewNoteFragment extends Fragment {
         title.setText(intent.getExtras().getString(MainActivity.Second_Note_Title));
         body.setText(intent.getExtras().getString(MainActivity.Second_Note_Body));
         Note.Category noteCategory = (Note.Category) intent.getSerializableExtra(MainActivity.Second_Note_Category);// we have used getSerializable here instead of getString as data type of Category is enum.
-        imageIcon.setImageResource(Note.categoryToDrawble(noteCategory));
+        imageIcon.setImageResource(Note.categoryToDrawbleCategory(noteCategory));
 
         return layoutFragment;
     }

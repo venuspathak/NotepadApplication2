@@ -12,7 +12,8 @@ import android.view.MenuInflater;
             import android.view.View;
             import android.widget.AdapterView;
             import android.widget.ArrayAdapter;
-            import android.widget.ListView;
+import android.widget.ImageButton;
+import android.widget.ListView;
             import android.widget.Toast;
 
             import java.io.BufferedReader;
@@ -32,6 +33,8 @@ import android.view.MenuInflater;
         private String[] rowsOfNotes;
         private String[][] entireNote = new String[10][];
         public static String noteTitleToBeUsedByAllInEdit ="";
+        public ImageButton shareButton;
+
 
 
         public void onActivityCreated(Bundle savedInstance) {
@@ -97,6 +100,7 @@ import android.view.MenuInflater;
             intent.putExtra(MainActivity.Second_Note_Category,note.getCategory());
             intent.putExtra(MainActivity.Second_Note_Title, note.getTitle());
             intent.putExtra(MainActivity.Second_Note_Body,note.getDescription());
+            intent.putExtra(MainActivity.Second_Note_Color_Category, note.getColorCategory());
 
             switch (fragmentToLoad){
 
@@ -127,6 +131,7 @@ import android.view.MenuInflater;
             intent.putExtra(MainActivity.Second_Note_Id, note.getNoteId());
             intent.putExtra(MainActivity.Second_Note_Category,note.getCategory());
             intent.putExtra(MainActivity.Second_Note_Title, note.getTitle());
+            intent.putExtra(MainActivity.Second_Note_Color_Category,note.getColorCategory());
             intent.putExtra(MainActivity.Second_Note_Body,note.getDescription());
 
             switch (fragmentToLoad){
@@ -200,7 +205,7 @@ import android.view.MenuInflater;
                             else if(entireNote[noteParts][2].equals("THOUGHTS"))
                                 category = Note.Category.THOUGHTS;
 
-                            notes.add(new Note(entireNote[noteParts][0],entireNote[noteParts][1],category));
+                             //notes.add(new Note(entireNote[noteParts][0], entireNote[noteParts][1], category,));
                         }
 
                     }
@@ -237,6 +242,7 @@ import android.view.MenuInflater;
 
                     launchNoteDetailActivity(MainActivity.FragmentToLoad.EDIT, rowPosition);
                     return true;
+
             }
             return super.onContextItemSelected(menuItem);
         }

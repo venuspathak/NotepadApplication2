@@ -25,5 +25,8 @@
     <string name="action_italics">ITALICS</string>
     <string name="action_underline">UNDERLINE IT</string>
 
+    <!-- Adding facebook_app_id for Share to Facebook Feature -->
+    <string name="facebook_app_id">345954055743337</string>
+
 
 </resources>

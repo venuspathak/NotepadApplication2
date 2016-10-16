@@ -4,8 +4,11 @@ package com.mobilecommerce.notepadapplication;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
+import android.content.res.Configuration;
 import android.graphics.Paint;
 import android.graphics.Typeface;
+import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.os.Environment;
 import android.app.Activity;
@@ -16,12 +19,14 @@ import android.support.v4.app.Fragment;
 import android.support.v4.os.EnvironmentCompat;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -54,7 +59,7 @@ public class EditNoteFragment extends Fragment {
 
     private ImageButton noteCategoryButton, noteColorCategoryButton;
     private Note.Category savedNoteCategoryButton;
-    private Colors.ColorCategory savedColorCategoryButton;
+    private Note.ColorCategory savedColorCategoryButton;
     public AlertDialog categoryAlertDialogObject, dialogForConfirm, colorAlertDialogObject;
     private EditText title, body;
     private static final String categoryModified = "Modified Category";
@@ -173,7 +178,6 @@ public class EditNoteFragment extends Fragment {
                 colorAlertDialogObject.show();
             }
         });
-
 /*
         //setting a listener on the bold menu item
         menuBold.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
@@ -207,11 +211,11 @@ public class EditNoteFragment extends Fragment {
         // Orientation has been changed if the category is grabbed from bundle
 
         if(savedNoteCategoryButton!=null){
-            noteCategoryButton.setImageResource(Note.categoryToDrawble(savedNoteCategoryButton));
+            noteCategoryButton.setImageResource(Note.categoryToDrawbleCategory(savedNoteCategoryButton));
         }else if(!newNote) { // this is coming from the fragment
             Note.Category noteCategory = (Note.Category) intent.getSerializableExtra(MainActivity.Second_Note_Category);
             savedNoteCategoryButton = noteCategory;
-            noteCategoryButton.setImageResource(Note.categoryToDrawble(noteCategory));
+            noteCategoryButton.setImageResource(Note.categoryToDrawbleCategory(noteCategory));
            // noteCategoryFinal=noteCategory; // This has been done to set the global variable with the modified category so that
             // it can be accessed in the method for writing into file
         }
@@ -529,27 +533,27 @@ public class EditNoteFragment extends Fragment {
 
                 switch (selectColor) {
                     case 0:
-                        savedColorCategoryButton = Colors.ColorCategory.GREY;
+                        savedColorCategoryButton = Note.ColorCategory.GREY;
                         relativeLayout.setBackgroundColor(getResources().getColor(R.color.greyBackgroundColor));
                         break;
 
                     case 1:
-                        savedColorCategoryButton = Colors.ColorCategory.PINK;
+                        savedColorCategoryButton = Note.ColorCategory.PINK;
                         relativeLayout.setBackgroundColor(getResources().getColor(R.color.pinkBackgroundColor));
                         break;
 
                     case 2:
-                        savedColorCategoryButton = Colors.ColorCategory.BLUE;
+                        savedColorCategoryButton = Note.ColorCategory.BLUE;
                         relativeLayout.setBackgroundColor(getResources().getColor(R.color.blueBackgroundColor));
                         break;
 
                     case 3:
-                        savedColorCategoryButton = Colors.ColorCategory.WHITE;
+                        savedColorCategoryButton = Note.ColorCategory.WHITE;
                         relativeLayout.setBackgroundColor(getResources().getColor(R.color.whiteBackgroundColor));
                         break;
 
                     case 4:
-                        savedColorCategoryButton = Colors.ColorCategory.ORANGE;
+                        savedColorCategoryButton = Note.ColorCategory.ORANGE;
                         relativeLayout.setBackgroundColor(getResources().getColor(R.color.orangeBackgroundColor));
                         break;
                 }
