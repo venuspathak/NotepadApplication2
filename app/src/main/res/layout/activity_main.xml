@@ -21,6 +21,16 @@
 
     </android.support.design.widget.AppBarLayout>
 
+    <android.support.design.widget.FloatingActionButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="16dp"
+        android:id="@+id/action_add_note"
+        app:srcCompat="@android:drawable/ic_input_add"
+        app:rippleColor="?attr/textColorAlertDialogListItem"
+        app:elevation="0dp"/>
+
     <include layout="@layout/content_main" />
 
 

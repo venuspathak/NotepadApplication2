@@ -17,7 +17,6 @@ import android.view.MenuItem;
 
 public class ViewNoteActivity extends AppCompatActivity {
 
-    private ShareActionProvider shareActionProvider=null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,29 +31,29 @@ public class ViewNoteActivity extends AppCompatActivity {
         //Inflate the menu; this adds items to the action bar if it is present.
        // getMenuInflater().inflate(R.menu.menu_view,menu);
 
-        menu.clear();
+       /* menu.clear();
         MenuInflater menuInflater = getMenuInflater();
         menuInflater.inflate(R.menu.menu_view,menu);
-        MenuItem menuItem = menu.findItem(R.id.action_share_note);
+        MenuItem menuItem = menu.findItem(R.id.action_share_note); */
 
         //Getting SharedActionProvider
-        shareActionProvider = (ShareActionProvider) MenuItemCompat.getActionProvider(menuItem);
+        //shareActionProvider = (ShareActionProvider) MenuItemCompat.getActionProvider(menuItem);
        // shareActionProvider.setShareHistoryFileName("share_history.xml");
 
-        Intent intentForShare = new Intent(Intent.ACTION_SEND);
+       /* Intent intentForShare = new Intent(Intent.ACTION_SEND);
         intentForShare.setType("text/plain");
         intentForShare.putExtra(Intent.EXTRA_TEXT, "text to share"); // Here the note shared will be written
-        setIntentForShare("text to share", intentForShare);
+        setIntentForShare("text to share", intentForShare); */
 
         return true;
 
     }
 
-    private void setIntentForShare(String stringToShare, Intent intentForShare){
-        if(shareActionProvider!=null) {
-            shareActionProvider.setShareIntent(intentForShare);
-        }
-    }
+    //private void setIntentForShare(String stringToShare, Intent intentForShare){
+      //  if(shareActionProvider!=null) {
+        //    shareActionProvider.setShareIntent(intentForShare);
+        //}
+    //}
 
     private void createAndAddAFragment() {
 

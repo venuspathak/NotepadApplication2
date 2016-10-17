@@ -11,6 +11,7 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"
@@ -33,7 +34,8 @@
             android:parentActivityName=".MainActivity"
             android:label="@string/view_Note_Fragment_Title">
         </activity>
-
     </application>
+    </manifest>
 
-</manifest>
+
+

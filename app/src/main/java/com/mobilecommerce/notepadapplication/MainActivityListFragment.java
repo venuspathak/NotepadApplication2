@@ -6,26 +6,28 @@ package com.mobilecommerce.notepadapplication;
 
 import android.app.ListFragment;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.ContextMenu;
 import android.view.MenuInflater;
-            import android.view.MenuItem;
-            import android.view.View;
-            import android.widget.AdapterView;
-            import android.widget.ArrayAdapter;
-            import android.widget.ListView;
-            import android.widget.Toast;
-
-            import java.io.BufferedReader;
-            import java.io.File;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
+import android.widget.Toast;
+import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.InputStream;
-            import java.io.InputStreamReader;
+import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.util.ArrayList;
@@ -83,6 +85,7 @@ public class MainActivityListFragment extends ListFragment {
             registerForContextMenu(getListView());
 
     }
+
         @Override
         public void onListItemClick(ListView listView, View view, int position, long id) {
             super.onListItemClick(listView, view, position, id);
@@ -92,7 +95,9 @@ public class MainActivityListFragment extends ListFragment {
 
            // launchNoteDetailActivity(MainActivity.FragmentToLoad.VIEW, position);
             launchViewNoteActivity(MainActivity.FragmentToLoad.VIEW, position);
+
         }
+
 
 
         private void launchViewNoteActivity(MainActivity.FragmentToLoad fragmentToLoad, int position) // launchNoteDetailActivity will show us individual notes.

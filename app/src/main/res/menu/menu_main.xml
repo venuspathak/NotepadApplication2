@@ -4,7 +4,7 @@
     tools:context="com.mobilecommerce.notepadapplication.MainActivity">
 
     <!-- Lowest category order plus ifRoom means it will be displayed as a button -->
-
+    <!--
     <item
         android:id="@+id/action_add_note"
         android:orderInCategory="1"
@@ -17,6 +17,6 @@
         android:title="@string/action_settings"
         app:showAsAction="never" />
 
-    <!-- Never means never display as a button but as an item irrespective of the category order -->
+     Never means never display as a button but as an item irrespective of the category order -->
 
 </menu>
