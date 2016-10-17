@@ -8,42 +8,46 @@ import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.ContextMenu;
 import android.view.MenuInflater;
-            import android.view.MenuItem;
-            import android.view.View;
-            import android.widget.AdapterView;
-            import android.widget.ArrayAdapter;
-import android.widget.ImageButton;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.ListView;
-            import android.widget.Toast;
+import android.widget.Toast;
 
-            import java.io.BufferedReader;
-            import java.io.File;
-            import java.io.FileNotFoundException;
-            import java.io.InputStream;
-            import java.io.InputStreamReader;
-            import java.util.ArrayList;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
+import java.util.ArrayList;
 
-
-
-    public class MainActivityListFragment extends ListFragment {
-
-        private ArrayList<Note> notes;
-        private AdapterForNote adapterForNote;
-        private static final String noteTextFile = "noteTextFile15.txt";
-        private String[] rowsOfNotes;
-        private String[][] entireNote = new String[10][];
-        public static String noteTitleToBeUsedByAllInEdit ="";
-        public ImageButton shareButton;
+import static com.mobilecommerce.notepadapplication.Note.trackerForNoteId;
 
 
+public class MainActivityListFragment extends ListFragment {
 
-        public void onActivityCreated(Bundle savedInstance) {
-            super.onActivityCreated(savedInstance);
+    public static ArrayList<Note> notes;
+    private AdapterForNote adapterForNote;
+    private static final String noteTextFile = "noteTextFile63.txt";
+    private String[] rowsOfNotes;
+    private String[][] entireNote = new String[50][];
+    public static String noteTitleToBeUsedByAllInEdit,noteBodyToBeUsedByAllInEdit, noteIdToBeUsedByAllInEdit, noteCategoryToBeUsedByAllInEdit ="";
+
+
+    public void onActivityCreated(Bundle savedInstance) {
+        super.onActivityCreated(savedInstance);
 
 
 
         notes = new ArrayList<Note>();
-        getTextFromNoteFile(notes);
+        getTextFromNoteFile(notes); // This is called to read the notes from the file and then displaying them
+        checkTotalNumberOfNotes(); // This is called to get the total number of notes. This value will be used to
+        // populate global variable trackerForNoteId
 
         /*
         notes.add(new Note("PERSONAL NOTE", "This is my personal note", Note.Category.PERSONAL));
@@ -69,181 +73,295 @@ import android.widget.ListView;
         adapterForNote = new AdapterForNote(getActivity(), notes);
         setListAdapter(adapterForNote);
 
-            getListView().setDivider(ContextCompat.getDrawable(getActivity(),android.R.color.darker_gray));
-            getListView().setDividerHeight(1);
+        getListView().setDivider(ContextCompat.getDrawable(getActivity(),android.R.color.darker_gray));
+        getListView().setDividerHeight(1);
 
-            registerForContextMenu(getListView());
+        registerForContextMenu(getListView());
 
     }
-        @Override
-        public void onListItemClick(ListView listView, View view, int position, long id) {
-            super.onListItemClick(listView, view, position, id);
+    @Override
+    public void onListItemClick(ListView listView, View view, int position, long id) {
+        super.onListItemClick(listView, view, position, id);
 
             /*we are using position of the click to launchNoteDetailActivity such that we get the information
             based on where we click on the screen */
 
-           // launchNoteDetailActivity(MainActivity.FragmentToLoad.VIEW, position);
-            launchViewNoteActivity(MainActivity.FragmentToLoad.VIEW, position);
-        }
+        // launchNoteDetailActivity(MainActivity.FragmentToLoad.VIEW, position);
+        launchViewNoteActivity(MainActivity.FragmentToLoad.VIEW, position);
+    }
 
 
-        private void launchViewNoteActivity(MainActivity.FragmentToLoad fragmentToLoad, int position) // launchNoteDetailActivity will show us individual notes.
-        {
+    private void launchViewNoteActivity(MainActivity.FragmentToLoad fragmentToLoad, int position) // launchNoteDetailActivity will show us individual notes.
+    {
             /*We are using this to basically grab all the data related to the note we have clicked.
               We will create a new intent and further pass along the information of a particular
               note such as its ID,Category,Title and Body */
 
-            Note note = (Note) getListAdapter().getItem(position);
+        Note note = (Note) getListAdapter().getItem(position);
+        noteTitleToBeUsedByAllInEdit = note.getTitle();
+        noteBodyToBeUsedByAllInEdit = note.getDescription();
+        noteCategoryToBeUsedByAllInEdit = note.getCategory().toString();
+        noteIdToBeUsedByAllInEdit = note.getNoteId();
 
-            Intent intent = new Intent(getActivity(),ViewNoteActivity.class);
-            intent.putExtra(MainActivity.Second_Note_Id, note.getNoteId());
-            intent.putExtra(MainActivity.Second_Note_Category,note.getCategory());
-            intent.putExtra(MainActivity.Second_Note_Title, note.getTitle());
-            intent.putExtra(MainActivity.Second_Note_Body,note.getDescription());
-            intent.putExtra(MainActivity.Second_Note_Color_Category, note.getColorCategory());
+        Intent intent = new Intent(getActivity(),ViewNoteActivity.class);
+        intent.putExtra(MainActivity.Second_Note_Id, note.getNoteId());
+        intent.putExtra(MainActivity.Second_Note_Category,note.getCategory());
+        intent.putExtra(MainActivity.Second_Note_Title, note.getTitle());
+        intent.putExtra(MainActivity.Second_Note_Body,note.getDescription());
 
-            switch (fragmentToLoad){
+        switch (fragmentToLoad){
 
-                case VIEW:
+            case VIEW:
 
-                    intent.putExtra(MainActivity.Second_Note_Fragment_To_Load, MainActivity.FragmentToLoad.VIEW);
-                    break;
+                intent.putExtra(MainActivity.Second_Note_Fragment_To_Load, MainActivity.FragmentToLoad.VIEW);
+                break;
 
-                case EDIT:
-                    intent.putExtra(MainActivity.Second_Note_Fragment_To_Load, MainActivity.FragmentToLoad.EDIT);
-                    break;
-            }
-
-            startActivity(intent);
+            case EDIT:
+                intent.putExtra(MainActivity.Second_Note_Fragment_To_Load, MainActivity.FragmentToLoad.EDIT);
+                break;
         }
 
-        private void launchNoteDetailActivity(MainActivity.FragmentToLoad fragmentToLoad, int position) // launchNoteDetailActivity will show us individual notes.
-        {
+        startActivity(intent);
+    }
+
+    private void launchNoteDetailActivity(MainActivity.FragmentToLoad fragmentToLoad, int position) // launchNoteDetailActivity will show us individual notes.
+    {
             /*We are using this to basically grab all the data related to the note we have clicked.
               We will create a new intent and further pass along the information of a particular
               note such as its ID,Category,Title and Body */
 
-            Note note = (Note) getListAdapter().getItem(position);
-            noteTitleToBeUsedByAllInEdit = note.getTitle();
-            Log.d("GOD", noteTitleToBeUsedByAllInEdit);
+        Note note = (Note) getListAdapter().getItem(position);
+        noteTitleToBeUsedByAllInEdit = note.getTitle();
+        noteBodyToBeUsedByAllInEdit = note.getDescription();
+        noteCategoryToBeUsedByAllInEdit = note.getCategory().toString();
+        noteIdToBeUsedByAllInEdit = note.getNoteId();
 
-            Intent intent = new Intent(getActivity(),ActivityOfNoteDetails.class);
-            intent.putExtra(MainActivity.Second_Note_Id, note.getNoteId());
-            intent.putExtra(MainActivity.Second_Note_Category,note.getCategory());
-            intent.putExtra(MainActivity.Second_Note_Title, note.getTitle());
-            intent.putExtra(MainActivity.Second_Note_Color_Category,note.getColorCategory());
-            intent.putExtra(MainActivity.Second_Note_Body,note.getDescription());
+        Intent intent = new Intent(getActivity(),ActivityOfNoteDetails.class);
+        intent.putExtra(MainActivity.Second_Note_Id, note.getNoteId());
+        intent.putExtra(MainActivity.Second_Note_Category,note.getCategory());
+        intent.putExtra(MainActivity.Second_Note_Title, note.getTitle());
+        intent.putExtra(MainActivity.Second_Note_Body,note.getDescription());
 
-            switch (fragmentToLoad){
+        switch (fragmentToLoad){
 
-                case VIEW:
+            case VIEW:
 
-                    intent.putExtra(MainActivity.Second_Note_Fragment_To_Load, MainActivity.FragmentToLoad.VIEW);
-                    break;
+                intent.putExtra(MainActivity.Second_Note_Fragment_To_Load, MainActivity.FragmentToLoad.VIEW);
+                break;
 
-                case EDIT:
-                    intent.putExtra(MainActivity.Second_Note_Fragment_To_Load, MainActivity.FragmentToLoad.EDIT);
+            case EDIT:
+                intent.putExtra(MainActivity.Second_Note_Fragment_To_Load, MainActivity.FragmentToLoad.EDIT);
 
-                    break;
-            }
-
-            startActivity(intent);
+                break;
         }
 
-        public void getTextFromNoteFile(ArrayList notes){
-            final Context context = getActivity().getApplicationContext();
-            try {
-                File file = context.getFileStreamPath(noteTextFile);
-                if(file.exists()) {
-                    InputStream inputStream = context.openFileInput(noteTextFile);
+        startActivity(intent);
+    }
 
-                    if (inputStream != null) {
+    public void getTextFromNoteFile(ArrayList notes){
+        final Context context = getActivity().getApplicationContext();
+        try {
+            File file = context.getFileStreamPath(noteTextFile);
+            if(file.exists()) {
+                InputStream inputStream = context.openFileInput(noteTextFile);
 
-                        InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
-                        BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
-                        String string;
-                        StringBuilder stringBuilder = new StringBuilder();
+                if (inputStream != null) {
 
-                        while ((string = bufferedReader.readLine()) != null) {
-                            stringBuilder.append(string + "\n");
-                        }
+                    InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
+                    BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+                    String string;
+                    StringBuilder stringBuilder = new StringBuilder();
 
-                        inputStream.close();
-                        Log.d("OUTPUT", stringBuilder.toString());
-                        String fileText = stringBuilder.toString();
-                        rowsOfNotes = fileText.split("\n");
+                    while ((string = bufferedReader.readLine()) != null) {
+                        stringBuilder.append(string + "\n");
+                    }
 
-                        Log.d("OUTPUT ROWS", rowsOfNotes[0]+","+rowsOfNotes[1]+","+rowsOfNotes[2]);
-
-                        Log.d("LENGTH", String.valueOf(rowsOfNotes.length));
+                    inputStream.close();
+                    String fileText = stringBuilder.toString();
+                    rowsOfNotes = fileText.split("\n");
 
 
-                        for(int rowNumber=0; rowNumber< rowsOfNotes.length; rowNumber++) {
-                            entireNote[rowNumber] = rowsOfNotes[rowNumber].split(",");
-                            Log.d("NOTE LENGTH",String.valueOf(entireNote[rowNumber].length));
-                            Log.d("NOTE TILE",entireNote[rowNumber][0] );
-                        }
-                        for(int noteParts=0; noteParts<rowsOfNotes.length; noteParts++) {
-                            Note.Category category=null;
+                    for(int rowNumber=0; rowNumber< rowsOfNotes.length; rowNumber++) {
+                    }
 
-                            if(entireNote[noteParts][2].equals("PERSONAL"))
-                                category = Note.Category.PERSONAL;
-                            else if(entireNote[noteParts][2].equals("FAMILY"))
-                                category = Note.Category.FAMILY;
-                            else if(entireNote[noteParts][2].equals("SCHOOL"))
-                                category = Note.Category.SCHOOL;
-                            else if(entireNote[noteParts][2].equals("BILL"))
-                                category = Note.Category.BILL;
-                            else if(entireNote[noteParts][2].equals("FOOD"))
-                                category = Note.Category.FOOD;
-                            else if(entireNote[noteParts][2].equals("DEFAULT"))
-                                category = Note.Category.DEFAULT;
-                            else if(entireNote[noteParts][2].equals("PARTY"))
-                                category = Note.Category.PARTY;
-                            else if(entireNote[noteParts][2].equals("SHOPPING"))
-                                category = Note.Category.SHOPPING;
-                            else if(entireNote[noteParts][2].equals("THOUGHTS"))
-                                category = Note.Category.THOUGHTS;
+                    for(int rowNumber=0; rowNumber< rowsOfNotes.length; rowNumber++) {
+                        entireNote[rowNumber] = rowsOfNotes[rowNumber].split(",");
+                    }
+                    for(int noteParts=0; noteParts<rowsOfNotes.length; noteParts++) {
+                        Note.Category category=null;
 
-                             //notes.add(new Note(entireNote[noteParts][0], entireNote[noteParts][1], category,));
-                        }
+                        if(entireNote[noteParts][2].equals("PERSONAL"))
+                            category = Note.Category.PERSONAL;
+                        else if(entireNote[noteParts][2].equals("FAMILY"))
+                            category = Note.Category.FAMILY;
+                        else if(entireNote[noteParts][2].equals("SCHOOL"))
+                            category = Note.Category.SCHOOL;
+                        else if(entireNote[noteParts][2].equals("BILL"))
+                            category = Note.Category.BILL;
+                        else if(entireNote[noteParts][2].equals("FOOD"))
+                            category = Note.Category.FOOD;
+                        else if(entireNote[noteParts][2].equals("DEFAULT"))
+                            category = Note.Category.DEFAULT;
+                        else if(entireNote[noteParts][2].equals("PARTY"))
+                            category = Note.Category.PARTY;
+                        else if(entireNote[noteParts][2].equals("SHOPPING"))
+                            category = Note.Category.SHOPPING;
+                        else if(entireNote[noteParts][2].equals("THOUGHTS"))
+                            category = Note.Category.THOUGHTS;
 
+                        notes.add(new Note(entireNote[noteParts][0], entireNote[noteParts][1],category,entireNote[noteParts][3]));
                     }
 
                 }
 
-            }catch(FileNotFoundException e){
-                Log.d("EXCEPTION: ", e.toString());
             }
 
-            catch(Throwable throwable){
-                Toast.makeText(context, "", Toast.LENGTH_SHORT).show();
+        }catch(FileNotFoundException e){
+            Log.d("EXCEPTION: ", e.toString());
+        }
+
+        catch(Throwable throwable){
+            Toast.makeText(context, "", Toast.LENGTH_LONG).show();
+        }
+
+    }
+
+    private int checkTotalNumberOfNotes() {
+        final Context context = getActivity().getApplicationContext();
+        int totalNumberOfNotes=1;
+        try {
+            File file = context.getFileStreamPath(noteTextFile);
+
+            if (file.exists()) {
+                InputStream inputStream = context.openFileInput(noteTextFile);
+
+                if (inputStream != null) {
+
+                    InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
+                    BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+                    String string;
+                    StringBuilder stringBuilder = new StringBuilder();
+
+                    while ((string = bufferedReader.readLine()) != null) {
+                        stringBuilder.append(string + "\n");
+                    }
+
+                    inputStream.close();
+                    String fileText = stringBuilder.toString();
+                    rowsOfNotes = fileText.split("\n");
+
+                    totalNumberOfNotes = rowsOfNotes.length;
+                    trackerForNoteId = totalNumberOfNotes+1;
+                }
+            }
+        } catch (FileNotFoundException e) {
+            Log.d("EXCEPTION: ", e.toString());
+        } catch (Throwable throwable) {
+            Toast.makeText(context, "", Toast.LENGTH_LONG).show();
+        }
+        return totalNumberOfNotes;
+    }
+
+    private void deleteNote(int rowPosition){
+        Note note = (Note) getListAdapter().getItem(rowPosition);
+        noteTitleToBeUsedByAllInEdit = note.getTitle();
+        noteBodyToBeUsedByAllInEdit = note.getDescription();
+        noteCategoryToBeUsedByAllInEdit = note.getCategory().toString();
+        noteIdToBeUsedByAllInEdit = note.getNoteId();
+
+
+        String stringToBeDeleted= noteTitleToBeUsedByAllInEdit+","+noteBodyToBeUsedByAllInEdit+","+noteCategoryToBeUsedByAllInEdit+","+noteIdToBeUsedByAllInEdit;
+
+        final Context context = getActivity().getApplicationContext();
+
+        File file, fileTemp;
+        BufferedReader bufferedReader;
+        PrintWriter printWriter;
+        String charset;
+
+        try {
+            file = context.getFileStreamPath(noteTextFile);
+
+            String tmp = "temporaryFile.txt";
+            fileTemp = context.getFileStreamPath(tmp);
+
+            charset = "UTF-8";
+
+            bufferedReader = new BufferedReader(new InputStreamReader(new FileInputStream(file), charset));
+            printWriter = new PrintWriter(new OutputStreamWriter(new FileOutputStream(fileTemp), charset));
+
+            for (String line; (line = bufferedReader.readLine()) != null;) {
+                if((line.equals(stringToBeDeleted))) {
+                    // NOTHING TO BE DONE HERE
+                }
+                else
+                    printWriter.println(line);
+            }
+
+            bufferedReader.close();
+            printWriter.close();
+            file.delete();
+            fileTemp.renameTo(file);
+
+            Intent intent = new Intent(getActivity(), MainActivity.class);
+            startActivity(intent);
+
+            if(fileTemp.exists()) {
+                InputStream inputStream = context.openFileInput(tmp);
+
+                if (inputStream != null) {
+
+                    InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
+                    BufferedReader bufferedReader2 = new BufferedReader(inputStreamReader);
+                    String string;
+                    StringBuilder stringBuilder = new StringBuilder();
+
+                    while ((string = bufferedReader2.readLine()) != null) {
+                        stringBuilder.append(string + "\n");
+                    }
+
+                    inputStream.close();
+                    String fileText = stringBuilder.toString();
+                    rowsOfNotes = fileText.split("\n");
+
+                    for (int rowNumber = 0; rowNumber < rowsOfNotes.length; rowNumber++) {
+                        entireNote[rowNumber] = rowsOfNotes[rowNumber].split(",");
+                    }
+                }
             }
 
         }
 
-        @Override
-        public void onCreateContextMenu (ContextMenu contextMenu, View view, ContextMenu.ContextMenuInfo contextMenuInfo) {
-            super.onCreateContextMenu(contextMenu,view,contextMenuInfo);
-
-            MenuInflater menuInflater = getActivity().getMenuInflater();
-            menuInflater.inflate(R.menu.menu_on_long_press, contextMenu);
-
+        catch(Exception exception){
+            Toast.makeText(context, "", Toast.LENGTH_LONG).show();
         }
+    }
 
-        @Override
-        public boolean onContextItemSelected(MenuItem menuItem){//it returns the if of whatever menu we select
+    @Override
+    public void onCreateContextMenu (ContextMenu contextMenu, View view, ContextMenu.ContextMenuInfo contextMenuInfo) {
+        super.onCreateContextMenu(contextMenu,view,contextMenuInfo);
 
-            AdapterView.AdapterContextMenuInfo adapterContextMenuInfo = (AdapterView.AdapterContextMenuInfo) menuItem.getMenuInfo();
-            int rowPosition = adapterContextMenuInfo.position;
+        MenuInflater menuInflater = getActivity().getMenuInflater();
+        menuInflater.inflate(R.menu.menu_on_long_press, contextMenu);
 
-            switch (menuItem.getItemId()) {
-                case R.id.edit:// if we press edit, it will return the following
+    }
 
-                    launchNoteDetailActivity(MainActivity.FragmentToLoad.EDIT, rowPosition);
-                    return true;
+    @Override
+    public boolean onContextItemSelected(MenuItem menuItem){//it returns the if of whatever menu we select
 
-            }
-            return super.onContextItemSelected(menuItem);
+        AdapterView.AdapterContextMenuInfo adapterContextMenuInfo = (AdapterView.AdapterContextMenuInfo) menuItem.getMenuInfo();
+        int rowPosition = adapterContextMenuInfo.position;
+
+        switch (menuItem.getItemId()) {
+            case R.id.edit:// if we press edit, it will return the following
+
+                launchNoteDetailActivity(MainActivity.FragmentToLoad.EDIT, rowPosition);
+                return true;
+
+            case R.id.delete:// if we press delete, it will call deleteNote() function
+                deleteNote(rowPosition);
+                return true;
         }
+        return super.onContextItemSelected(menuItem);
+    }
 }

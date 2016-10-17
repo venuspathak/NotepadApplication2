@@ -3,16 +3,17 @@ package com.mobilecommerce.notepadapplication;
 
 public class Note {
 
-    private String noteTitle, noteDescription;
-    private long noteId, dateCreated;
+    private String noteTitle, noteDescription, noteId;
+    private long dateCreated;
     private Category noteCategory;
     private ColorCategory noteColorCategory;
+    public static int trackerForNoteId = 0;
 
 
     public enum Category {PERSONAL, FAMILY, SCHOOL, BILL, FOOD, DEFAULT, PARTY, SHOPPING, THOUGHTS }
     public enum ColorCategory {GREY, PINK, BLUE, WHITE, ORANGE}
 
-    public Note(String noteTitle, String noteDescription, Category noteCategory, ColorCategory noteColorCategory) {
+    public Note(String noteTitle, String noteDescription, Category noteCategory, String noteId) {
         this.noteTitle = noteTitle;
         this.noteDescription = noteDescription;
         this.noteCategory = noteCategory;
@@ -33,14 +34,13 @@ public class Note {
         return noteCategory;
     }
 
-    public long getNoteId() {
+    public String getNoteId() {
         return noteId;
     }
 
     public ColorCategory getColorCategory(){
         return noteColorCategory;
     }
-
 
     public long getDateCreated() {
         return dateCreated;
