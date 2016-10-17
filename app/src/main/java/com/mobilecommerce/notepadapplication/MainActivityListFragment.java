@@ -37,7 +37,7 @@ public class MainActivityListFragment extends ListFragment {
 
         public static ArrayList<Note> notes;
         private AdapterForNote adapterForNote;
-        private static final String noteTextFile = "noteTextFile63.txt";
+        private static final String noteTextFile = "noteTextFile87.txt";
         private String[] rowsOfNotes;
         private String[][] entireNote = new String[50][];
         public static String noteTitleToBeUsedByAllInEdit,noteBodyToBeUsedByAllInEdit, noteIdToBeUsedByAllInEdit, noteCategoryToBeUsedByAllInEdit ="";
@@ -271,87 +271,6 @@ public class MainActivityListFragment extends ListFragment {
                 Toast.makeText(context, "", Toast.LENGTH_LONG).show();
             }
             return totalNumberOfNotes;
-        }
-
-        private void deleteNote(int rowPosition){
-            Note note = (Note) getListAdapter().getItem(rowPosition);
-            noteTitleToBeUsedByAllInEdit = note.getTitle();
-            noteBodyToBeUsedByAllInEdit = note.getDescription();
-            noteCategoryToBeUsedByAllInEdit = note.getCategory().toString();
-            noteIdToBeUsedByAllInEdit = note.getNoteId();
-
-
-            String stringToBeDeleted= noteTitleToBeUsedByAllInEdit+","+noteBodyToBeUsedByAllInEdit+","+noteCategoryToBeUsedByAllInEdit+","+noteIdToBeUsedByAllInEdit;
-           // Log.d("SEE THIS", stringToBeDeleted);
-
-            final Context context = getActivity().getApplicationContext();
-
-            File file, tempFile;
-            BufferedReader bufferedReader;
-            PrintWriter printWriter, printWriter2;
-            String charset;
-          //  int lineToBeDeleted;
-          //  int trackerForLineNumber=0;
-
-            try {
-                file = context.getFileStreamPath(noteTextFile);
-                tempFile = File.createTempFile("temporaryFile", ".txt", file.getParentFile()); // Create a temporary file
-
-               // File f = new File("temporaryFile.txt");
-               // File f2 = new File(noteTextFile);
-               // FileInputStream instream = new FileInputStream(f);
-               // FileOutputStream outstream = new FileOutputStream(file);
-
-                byte[] buffer = new byte[1024];
-                int length;
-            //    String line2="";
-
-                // This is done so as to read everything into it for temporary purpose.
-
-                charset = "UTF-8";
-
-                bufferedReader = new BufferedReader(new InputStreamReader(new FileInputStream(file), charset));
-                printWriter = new PrintWriter(new OutputStreamWriter(new FileOutputStream(tempFile), charset));
-              //  printWriter2 = new PrintWriter(new OutputStreamWriter(new FileOutputStream(file), charset));
-
-                for (String line; (line = bufferedReader.readLine()) != null;) {
-                  //  trackerForLineNumber++;
-                  // if(line.contains(stringToBeDeleted)){
-                   //    lineToBeDeleted = trackerForLineNumber;
-                  // }
-                    line = line.replace(stringToBeDeleted, "");
-                    printWriter.println(line);
-
-                }
-
-              // printWriter2.println("");
-                file.delete();
-
-                Log.d("STATUS2", String.valueOf(file.exists()));
-                File fileNew = new File(noteTextFile);
-
-                Log.d("STATUS", String.valueOf(fileNew.exists()));
-                 FileInputStream instream = new FileInputStream(tempFile);
-
-                FileOutputStream fileOutputStream = context.openFileOutput(noteTextFile, Context.MODE_APPEND);
-
-                FileOutputStream outstream = new FileOutputStream(fileNew);
-               // Log.d("TEMP FILE LENGTH", String.valueOf(length = instream.read(buffer)));
-                while ((length = instream.read(buffer)) > 0){
-                    outstream.write(buffer, 0, length);
-                }
-                bufferedReader.close();
-                printWriter.close();
-                instream.close();
-                outstream.close();
-                //tempFile.renameTo(file);
-
-                Intent intent = new Intent(getActivity(), MainActivity.class);
-                startActivity(intent);
-
-            }catch(Exception exception){
-                Toast.makeText(context, "", Toast.LENGTH_LONG).show();
-            }
         }
 
 

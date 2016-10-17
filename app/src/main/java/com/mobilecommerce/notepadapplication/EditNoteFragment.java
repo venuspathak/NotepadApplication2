@@ -70,7 +70,7 @@ public class EditNoteFragment extends Fragment {
     private EditText title, body;
     private static final String categoryModified = "Modified Category";
     public Boolean newNote = false;
-    private static final String noteTextFile = "noteTextFile63.txt";
+    private static final String noteTextFile = "noteTextFile87.txt";
     private EditText textEditor;
     private Note.Category noteCategoryFinal;
     private String[] rowsOfNotes;
@@ -422,7 +422,7 @@ public class EditNoteFragment extends Fragment {
                     identifierTitleAddOrEdit = "Value not getting checked"; // When new note is being added, note title before edit does not make sense, hence any value can be put here
                 }
 
-                tryThis(view, textToBeWrittenIntoFile, identifierAddOrEdit, identifierTitleAddOrEdit);
+                saveNoteIntoFile(view, textToBeWrittenIntoFile, identifierAddOrEdit, identifierTitleAddOrEdit);
 
                 Intent intent = new Intent(getActivity(), MainActivity.class);
                 startActivity(intent);
@@ -445,90 +445,7 @@ public class EditNoteFragment extends Fragment {
     }
 
 
-    public void saveNoteIntoFile(View v, String textToBeWrittenIntoFile, int identifierAddOrEdit, String titleToMaintainUniqueness){
-        final Context context = getActivity().getApplicationContext();
-        try {
-            File file, fileTemp;
-            String charset = "UTF-8";;
-            BufferedReader bufferedReader;
-            PrintWriter printWriter;
-
-            String tmp = "temporaryFile.txt"; // String holding the temporary file name
-            fileTemp = context.getFileStreamPath(tmp); // String containing the path of the temporary file name
-            printWriter = new PrintWriter(new OutputStreamWriter(new FileOutputStream(fileTemp), charset));
-
-            FileOutputStream fileOutputStreamTemp = context.openFileOutput(tmp, Context.MODE_APPEND); // Opening the original file in context mode
-            OutputStreamWriter outputStreamWriterTemp = new OutputStreamWriter(fileOutputStreamTemp);
-            // PrintWriter of the temporary file
-
-            FileOutputStream fileOutputStream = context.openFileOutput(noteTextFile, Context.MODE_APPEND); // Opening the original file in context mode
-            OutputStreamWriter outputStreamWriter = new OutputStreamWriter(fileOutputStream);
-            // Output Stream Writer for the original file
-
-            if(identifierAddOrEdit==0) { // Editing an already existing note
-                String editedLine="";
-
-                //Log.d("AJUVENUS", String.valueOf(identifierAddOrEdit)+titleToMaintainUniqueness);
-
-                file = context.getFileStreamPath(noteTextFile);
-                bufferedReader = new BufferedReader(new InputStreamReader(new FileInputStream(file), charset));
-
-                for (String line; (line = bufferedReader.readLine()) != null;) {
-                    if((line.contains(titleToMaintainUniqueness))) {
-                        //editedLine = line.replace(line, textToBeWrittenIntoFile);
-                        //printWriter.println(editedLine);
-                        Log.d("CHANGED LINE", editedLine);
-                    }else{
-                        printWriter.println(line);
-                        Log.d("LINE WONDERLAND", line);
-                    }
-                }
-               // printWriter.println(editedLine);
-                outputStreamWriterTemp.write(textToBeWrittenIntoFile);
-                outputStreamWriterTemp.write("\n");
-                file.delete();
-                fileTemp.renameTo(file);
-                bufferedReader.close();
-                printWriter.close();
-
-                if(file.exists()) {
-                    InputStream inputStream = context.openFileInput(noteTextFile);
-
-                    if (inputStream != null) {
-
-                        InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
-                        BufferedReader bufferedReader2 = new BufferedReader(inputStreamReader);
-                        String string;
-                        StringBuilder stringBuilder = new StringBuilder();
-
-                        while ((string = bufferedReader2.readLine()) != null) {
-                            stringBuilder.append(string + "\n");
-                        }
-
-                        inputStream.close();
-                        String fileText = stringBuilder.toString();
-                        rowsOfNotes = fileText.split("\n");
-
-                        for (int rowNumber = 0; rowNumber < rowsOfNotes.length; rowNumber++) {
-                            entireNote[rowNumber] = rowsOfNotes[rowNumber].split(",");
-                        }
-                    }
-                }
-                outputStreamWriter.write(textToBeWrittenIntoFile);
-                outputStreamWriter.write("\n");
-
-            }else if (identifierAddOrEdit==1){ // Adding a new note
-                outputStreamWriter.write(textToBeWrittenIntoFile);
-                outputStreamWriter.write("\n");
-                outputStreamWriter.close();
-            }
-            Toast.makeText(context, "THE NOTE HAS BEEN SAVED.", Toast.LENGTH_LONG).show();
-        }catch(Throwable throwable){
-            Toast.makeText(context, "EXCEPTION: "+throwable.toString(), Toast.LENGTH_LONG).show();
-        }
-    }
-
-    private void tryThis(View v, String textToBeWrittenIntoFile, int identifierAddOrEdit, String titleToMaintainUniqueness){
+    private void saveNoteIntoFile(View v, String textToBeWrittenIntoFile, int identifierAddOrEdit, String titleToMaintainUniqueness){
         String oldTitle = titleToMaintainUniqueness;
         String oldBody = noteBodyToBeUsedByAllInEdit;
         String oldCategory = noteCategoryToBeUsedByAllInEdit;
@@ -558,7 +475,7 @@ public class EditNoteFragment extends Fragment {
 
                 for (String line; (line = bufferedReader.readLine()) != null; ) {
                     if ((line.equals(oldString))) {
-                        //line = line.replace(stringToBeDeleted, "");
+                        // DO NOTHING HERE
                     } else
                         printWriter.println(line);
                 }

@@ -15,9 +15,6 @@ import android.view.MenuItem;
 //import com.facebook.FacebookSdk;
 //import com.facebook.appevents.AppEventsLogger;
 
-
-
-
 public class MainActivity extends AppCompatActivity{
 
     //Using the package name so that we donot get confused between keys when we will try to implement the share on facebook part
@@ -53,9 +50,7 @@ public class MainActivity extends AppCompatActivity{
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }else if (id == R.id.action_add_note){
+       if (id == R.id.action_add_note){
             Intent intentNoteDetail = new Intent(this, ActivityOfNoteDetails.class);
             intentNoteDetail.putExtra(MainActivity.Second_Note_Fragment_To_Load, FragmentToLoad.ADD);
             startActivity(intentNoteDetail);
