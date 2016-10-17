@@ -11,20 +11,21 @@ public class Note {
     private String noteTitle, noteDescription, noteId;
     private long dateCreated;
     private Category noteCategory;
-<<<<<<< HEAD
-    private ColorCategory noteColorCategory;
+
+    private Colors.ColorCategory noteColorCategory;
     public static int trackerForNoteId = 0;
-=======
->>>>>>> parent of cf6866e... Commiting Color Changes
 
 
     public enum Category {PERSONAL, FAMILY, SCHOOL, BILL, FOOD, DEFAULT, PARTY, SHOPPING, THOUGHTS }
 
-<<<<<<< HEAD
-    public Note(String noteTitle, String noteDescription, Category noteCategory, String noteId, ColorCategory noteColorCategory) {
-=======
+
+    public Note(String noteTitle, String noteDescription, Category noteCategory, String noteId, Colors noteColorCategory) {
+
     public Note(String noteTitle, String noteDescription, Category noteCategory) {
->>>>>>> parent of cf6866e... Commiting Color Changes
+
+
+    public Note(String noteTitle, String noteDescription, Category noteCategory, String noteId) {
+
         this.noteTitle = noteTitle;
         this.noteDescription = noteDescription;
         this.noteCategory = noteCategory;
@@ -48,23 +49,26 @@ public class Note {
         return noteId;
     }
 
-<<<<<<< HEAD
+
     public ColorCategory getColorCategory(){
         return noteColorCategory;
     }
 
-=======
->>>>>>> parent of cf6866e... Commiting Color Changes
+
+
     public long getDateCreated() {
         return dateCreated;
     }
 
     public String toString() {
-<<<<<<< HEAD
+
         return "ID:" + noteId + "Title" + noteTitle + "Description" + noteDescription + "IconID" + noteCategory.name() +"Color "+noteColorCategory.name()+ "Date: " + dateCreated;
-=======
+
         return "ID:" + noteId + "Title" + noteTitle + "Description" + noteDescription + "IconID" + noteCategory.name() + "Date: " + dateCreated;
->>>>>>> parent of cf6866e... Commiting Color Changes
+
+
+        return "ID:" + noteId + "Title" + noteTitle + "Description" + noteDescription + "IconID" + noteCategory.name() +"Color"+noteColorCategory.name()+ "Date: " + dateCreated;
+
     }
 
     public int getAssociatedDrawble() {
@@ -108,8 +112,17 @@ public class Note {
     }
 
 
+    private ColorCategory backgroundColor;
+
+    public void ColorCategory(ColorCategory backgroundColor) {
+        this.backgroundColor = backgroundColor;
+    }
+
+    public ColorCategory getBackgroundColor(){
+        return backgroundColor;
+    }
     public int getAssociatedDrawbleColorCategory() {
-        return categoryToBackgroundColor(noteColorCategory);
+        return categoryToBackgroundColor(backgroundColor);
     }
 
     public static int categoryToBackgroundColor(ColorCategory backgroundColor){
@@ -131,9 +144,9 @@ public class Note {
 
         }
         return categoryToBackgroundColor(backgroundColor);
-=======
+
         return categoryToDrawble(noteCategory);
->>>>>>> parent of cf6866e... Commiting Color Changes
+
     }
 
 

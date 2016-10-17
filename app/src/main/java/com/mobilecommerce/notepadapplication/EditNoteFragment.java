@@ -1,13 +1,9 @@
 package com.mobilecommerce.notepadapplication;
 
-
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-<<<<<<< HEAD
 import android.graphics.Color;
-=======
->>>>>>> parent of cf6866e... Commiting Color Changes
 import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -191,8 +187,6 @@ public class EditNoteFragment extends Fragment {
                 colorAlertDialogObject.show();
             }
         });
-<<<<<<< HEAD
-=======
 
 /*
         //setting a listener on the bold menu item
@@ -221,13 +215,16 @@ public class EditNoteFragment extends Fragment {
         }else if(!newNote) { // this is coming from the fragment
             Note.Category noteCategory = (Note.Category) intent.getSerializableExtra(MainActivity.Second_Note_Category);
             savedNoteCategoryButton = noteCategory;
-<<<<<<< HEAD
+
             noteCategoryButton.setImageResource(Note.categoryToDrawbleCategory(noteCategory));
+
+            noteCategoryButton.setImageResource(Note.categoryToDrawble(noteCategory));
+
             // noteCategoryFinal=noteCategory; // This has been done to set the global variable with the modified category so that
-=======
+
             noteCategoryButton.setImageResource(Note.categoryToDrawble(noteCategory));
            // noteCategoryFinal=noteCategory; // This has been done to set the global variable with the modified category so that
->>>>>>> parent of cf6866e... Commiting Color Changes
+
             // it can be accessed in the method for writing into file
         }
 

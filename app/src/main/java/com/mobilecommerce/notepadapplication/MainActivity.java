@@ -7,13 +7,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+//import com.facebook.CallbackManager;
 
-<<<<<<< HEAD
-import com.facebook.CallbackManager;
-import com.facebook.FacebookSdk;
-import com.facebook.appevents.AppEventsLogger;
-=======
->>>>>>> parent of cf6866e... Commiting Color Changes
+//import com.facebook.FacebookSdk;
+//import com.facebook.appevents.AppEventsLogger;
+
+
 
 
 public class MainActivity extends AppCompatActivity{
@@ -25,7 +24,6 @@ public class MainActivity extends AppCompatActivity{
     public static final String Second_Note_Category = "com.mobilecommerce.notepadapplication.Note Category";
     public static final String Second_Note_Fragment_To_Load = "com.mobilecommerce.notepadapplication.Fragment To Load";
     public enum FragmentToLoad{VIEW, EDIT, ADD}
-
 
 
     @Override
@@ -63,8 +61,6 @@ public class MainActivity extends AppCompatActivity{
 
         return super.onOptionsItemSelected(item);
     }
-
-
 
 
 }
