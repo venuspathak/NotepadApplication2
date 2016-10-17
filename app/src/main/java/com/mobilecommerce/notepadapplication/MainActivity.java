@@ -13,7 +13,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
-import com.facebook.CallbackManager;
 import com.facebook.FacebookSdk;
 import com.facebook.appevents.AppEventsLogger;
 
@@ -29,7 +28,6 @@ public class MainActivity extends AppCompatActivity{
     public static final String Second_Note_Color_Category = "com.mobilecommerce.notepadapplication.Color Category";
     public enum FragmentToLoad{VIEW, EDIT, ADD}
     private FloatingActionButton addNewNote;
-
 
 
     @Override
@@ -78,8 +76,6 @@ public class MainActivity extends AppCompatActivity{
         Toast.makeText(this, "Orientation Changed", Toast.LENGTH_LONG).show();
         super.onConfigurationChanged(newConfiguration);
     }
-
-
 
 
 }

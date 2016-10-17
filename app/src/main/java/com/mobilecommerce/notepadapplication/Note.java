@@ -13,7 +13,7 @@ public class Note {
     public enum Category {PERSONAL, FAMILY, SCHOOL, BILL, FOOD, DEFAULT, PARTY, SHOPPING, THOUGHTS }
     public enum ColorCategory {GREY, PINK, BLUE, WHITE, ORANGE}
 
-    public Note(String noteTitle, String noteDescription, Category noteCategory, String noteId, ColorCategory noteColorCategory) {
+    public Note(String noteTitle, String noteDescription, Category noteCategory, String noteId) {
         this.noteTitle = noteTitle;
         this.noteDescription = noteDescription;
         this.noteCategory = noteCategory;
@@ -47,7 +47,7 @@ public class Note {
     }
 
     public String toString() {
-        return "ID:" + noteId + "Title" + noteTitle + "Description" + noteDescription + "IconID" + noteCategory.name() +"Color "+noteColorCategory.name()+ "Date: " + dateCreated;
+        return "ID:" + noteId + "Title" + noteTitle + "Description" + noteDescription + "IconID" + noteCategory.name() +"Color"+noteColorCategory.name()+ "Date: " + dateCreated;
     }
 
     public int getAssociatedDrawbleCategory() {
@@ -90,8 +90,17 @@ public class Note {
     }
 
 
+    private ColorCategory backgroundColor;
+
+    public void ColorCategory(ColorCategory backgroundColor) {
+        this.backgroundColor = backgroundColor;
+    }
+
+    public ColorCategory getBackgroundColor(){
+        return backgroundColor;
+    }
     public int getAssociatedDrawbleColorCategory() {
-        return categoryToBackgroundColor(noteColorCategory);
+        return categoryToBackgroundColor(backgroundColor);
     }
 
     public static int categoryToBackgroundColor(ColorCategory backgroundColor){

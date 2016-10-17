@@ -2,25 +2,19 @@ package com.mobilecommerce.notepadapplication;
 
 import android.app.ListFragment;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.ContextMenu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
-import com.facebook.CallbackManager;
-import com.facebook.FacebookSdk;
-import com.facebook.share.model.SharePhoto;
-import com.facebook.share.model.SharePhotoContent;
-import com.facebook.share.widget.ShareButton;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -41,11 +35,7 @@ public class MainActivityListFragment extends ListFragment {
     private AdapterForNote adapterForNote;
     private static final String noteTextFile = "noteTextFile63.txt";
     private String[] rowsOfNotes;
-    private CallbackManager callbackManager;
     private String[][] entireNote = new String[50][];
-    private ShareButton shareButton;
-    private Bitmap imageBitmap;
-    private int counter = 0;
     public static String noteTitleToBeUsedByAllInEdit,noteBodyToBeUsedByAllInEdit, noteIdToBeUsedByAllInEdit, noteCategoryToBeUsedByAllInEdit ="";
 
 
@@ -89,74 +79,17 @@ public class MainActivityListFragment extends ListFragment {
         registerForContextMenu(getListView());
 
     }
-    protected void facebookSDK(){
-        FacebookSdk.sdkInitialize(getActivity().getApplicationContext());
-        callbackManager = CallbackManager.Factory.create();
-    }
     @Override
     public void onListItemClick(ListView listView, View view, int position, long id) {
         super.onListItemClick(listView, view, position, id);
-
 
             /*we are using position of the click to launchNoteDetailActivity such that we get the information
             based on where we click on the screen */
 
         // launchNoteDetailActivity(MainActivity.FragmentToLoad.VIEW, position);
         launchViewNoteActivity(MainActivity.FragmentToLoad.VIEW, position);
-        shareButton = (ShareButton) getActivity().findViewById(R.id.shareButton);
-
-        shareButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                postScreenshot();
-            }
-        });
     }
 
-    @Override
-    public void onActivityResult(final int requestCode, final int resultCode, final Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        callbackManager.onActivityResult(requestCode,resultCode,data);
-    }
-
-    public void postScreenshot(){
-        if(counter == 0) {
-            View rootView = getActivity().findViewById(R.id.content_main).getRootView();
-
-            rootView.setDrawingCacheEnabled(true);
-
-            imageBitmap = Bitmap.createBitmap(rootView.getDrawingCache());
-
-            rootView.destroyDrawingCache();
-
-
-            //share dialog
-            AlertDialog.Builder shareDialog = new AlertDialog.Builder(getActivity());
-            shareDialog.setTitle("Share Note ScreenShot");
-            shareDialog.setMessage("Post ScreenShot to Facebook?");
-            shareDialog.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    SharePhoto sharePhoto = new SharePhoto.Builder().setBitmap(imageBitmap).build();
-                    SharePhotoContent content = new SharePhotoContent.Builder().addPhoto(sharePhoto).build();
-                    shareButton.setShareContent(content);
-                    counter = 1;
-                    shareButton.performClick();
-                }
-            });
-            shareDialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    dialog.cancel();
-                }
-            });
-            shareDialog.show();
-        }
-        else {
-            counter = 0;
-            shareButton.setShareContent(null);
-        }
-    }
 
     private void launchViewNoteActivity(MainActivity.FragmentToLoad fragmentToLoad, int position) // launchNoteDetailActivity will show us individual notes.
     {
@@ -278,7 +211,7 @@ public class MainActivityListFragment extends ListFragment {
                         else if(entireNote[noteParts][2].equals("THOUGHTS"))
                             category = Note.Category.THOUGHTS;
 
-                        //notes.add(new Note(entireNote[noteParts][0], entireNote[noteParts][1],category,entireNote[noteParts][3]));
+                        notes.add(new Note(entireNote[noteParts][0], entireNote[noteParts][1],category,entireNote[noteParts][3]));
                     }
 
                 }
