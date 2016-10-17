@@ -108,6 +108,7 @@ public class MainActivityListFragment extends ListFragment {
         intent.putExtra(MainActivity.Second_Note_Category,note.getCategory());
         intent.putExtra(MainActivity.Second_Note_Title, note.getTitle());
         intent.putExtra(MainActivity.Second_Note_Body,note.getDescription());
+        intent.putExtra(MainActivity.Second_Note_Color_Category,note.getColorCategory());
 
         switch (fragmentToLoad){
 
@@ -141,6 +142,7 @@ public class MainActivityListFragment extends ListFragment {
         intent.putExtra(MainActivity.Second_Note_Category,note.getCategory());
         intent.putExtra(MainActivity.Second_Note_Title, note.getTitle());
         intent.putExtra(MainActivity.Second_Note_Body,note.getDescription());
+        intent.putExtra(MainActivity.Second_Note_Color_Category,note.getColorCategory());
 
         switch (fragmentToLoad){
 
