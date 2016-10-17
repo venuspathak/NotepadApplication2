@@ -1,16 +1,13 @@
 package com.mobilecommerce.notepadapplication;
 
 
-import android.content.ClipData;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.Toast;
 
 import com.facebook.CallbackManager;
@@ -28,7 +25,6 @@ public class MainActivity extends AppCompatActivity{
     public static final String Second_Note_Fragment_To_Load = "com.mobilecommerce.notepadapplication.Fragment To Load";
     public static final String Second_Note_Color_Category = "com.mobilecommerce.notepadapplication.Color Category";
     public enum FragmentToLoad{VIEW, EDIT, ADD}
-    private FloatingActionButton addNewNote;
 
 
 
@@ -40,21 +36,6 @@ public class MainActivity extends AppCompatActivity{
         setSupportActionBar(toolbar);
         FacebookSdk.sdkInitialize(getApplicationContext());
         AppEventsLogger.activateApp(this);
-
-        addNewNote = (FloatingActionButton) findViewById(R.id.action_add_note);
-        addNewNote.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                AddNewNote();
-            }
-        });
-
-    }
-
-    public void AddNewNote(){
-        Intent intentNoteDetail = new Intent(this, ActivityOfNoteDetails.class);
-        intentNoteDetail.putExtra(MainActivity.Second_Note_Fragment_To_Load, FragmentToLoad.ADD);
-        startActivity(intentNoteDetail);
 
     }
 
@@ -69,6 +50,18 @@ public class MainActivity extends AppCompatActivity{
     public boolean onOptionsItemSelected(MenuItem item) { // Handle all items here
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.action_settings) {
+            return true;
+        }else if (id == R.id.action_add_note){
+            Intent intentNoteDetail = new Intent(this, ActivityOfNoteDetails.class);
+            intentNoteDetail.putExtra(MainActivity.Second_Note_Fragment_To_Load, FragmentToLoad.ADD);
+            startActivity(intentNoteDetail);
+            return true;
+        }
 
         return super.onOptionsItemSelected(item);
     }
