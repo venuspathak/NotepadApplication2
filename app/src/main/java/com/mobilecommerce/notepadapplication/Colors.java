@@ -1,11 +1,14 @@
+/*
+Authors: Venus Pathak - 7972526
+         Shivjot Baidwan - 8028412
+ */
+
 package com.mobilecommerce.notepadapplication;
 
 import android.content.res.ColorStateList;
 import android.graphics.Color;
 
-/**
- * Created by Shivu on 2016-10-10.
- */
+
 
 public class Colors {
 

@@ -1,6 +1,8 @@
-
+/*
+Authors: Venus Pathak - 7972526
+         Shivjot Baidwan - 8028412
+ */
 package com.mobilecommerce.notepadapplication;
-
 
 import android.view.View;
 
@@ -18,10 +20,6 @@ public class Note {
 
     public enum Category {PERSONAL, FAMILY, SCHOOL, BILL, FOOD, DEFAULT, PARTY, SHOPPING, THOUGHTS }
 
-
-    public Note(String noteTitle, String noteDescription, Category noteCategory, String noteId, Colors noteColorCategory) {
-
-    public Note(String noteTitle, String noteDescription, Category noteCategory) {
 
 
     public Note(String noteTitle, String noteDescription, Category noteCategory, String noteId) {
@@ -50,24 +48,14 @@ public class Note {
     }
 
 
-    public ColorCategory getColorCategory(){
-        return noteColorCategory;
-    }
-
-
-
     public long getDateCreated() {
         return dateCreated;
     }
 
     public String toString() {
 
-        return "ID:" + noteId + "Title" + noteTitle + "Description" + noteDescription + "IconID" + noteCategory.name() +"Color "+noteColorCategory.name()+ "Date: " + dateCreated;
 
         return "ID:" + noteId + "Title" + noteTitle + "Description" + noteDescription + "IconID" + noteCategory.name() + "Date: " + dateCreated;
-
-
-        return "ID:" + noteId + "Title" + noteTitle + "Description" + noteDescription + "IconID" + noteCategory.name() +"Color"+noteColorCategory.name()+ "Date: " + dateCreated;
 
     }
 
@@ -107,46 +95,8 @@ public class Note {
 
 
         }
-<<<<<<< HEAD
-        return categoryToDrawbleCategory(noteCategory);
-    }
-
-
-    private ColorCategory backgroundColor;
-
-    public void ColorCategory(ColorCategory backgroundColor) {
-        this.backgroundColor = backgroundColor;
-    }
-
-    public ColorCategory getBackgroundColor(){
-        return backgroundColor;
-    }
-    public int getAssociatedDrawbleColorCategory() {
-        return categoryToBackgroundColor(backgroundColor);
-    }
-
-    public static int categoryToBackgroundColor(ColorCategory backgroundColor){
-        switch (backgroundColor) {
-            case GREY:
-                return R.color.greyBackgroundColor;
-
-            case PINK:
-                return R.color.pinkBackgroundColor;
-
-            case WHITE:
-                return R.color.whiteBackgroundColor;
-
-            case ORANGE:
-                return R.color.orangeBackgroundColor;
-
-            case BLUE:
-                return R.color.blueBackgroundColor;
-
-        }
-        return categoryToBackgroundColor(backgroundColor);
 
         return categoryToDrawble(noteCategory);
-
     }
 
 

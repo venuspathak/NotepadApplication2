@@ -43,21 +43,9 @@
     <ImageButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
         app:srcCompat="@android:drawable/ic_menu_share"
->>>>>>> origin/master
         android:layout_alignBottom="@+id/noteBody"
         android:layout_alignParentEnd="true"
         android:id="@+id/shareButton" />
-
-=======
-        android:id="@+id/shareButton"
-        android:layout_alignBottom="@+id/noteTitle"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentTop="true"
-        app:srcCompat="@android:drawable/ic_menu_share" />
->>>>>>> parent of cf6866e... Commiting Color Changes
 
 </RelativeLayout>
