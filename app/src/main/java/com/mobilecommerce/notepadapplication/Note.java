@@ -14,7 +14,6 @@ public class Note {
     private long dateCreated;
     private Category noteCategory;
 
-    private Colors.ColorCategory noteColorCategory;
     public static int trackerForNoteId = 0;
 
 

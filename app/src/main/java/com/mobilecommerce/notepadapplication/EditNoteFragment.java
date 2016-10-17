@@ -130,9 +130,6 @@ public class EditNoteFragment extends Fragment {
         return false;
     }
 
-    public void addListenerForShare(){
-    }
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
