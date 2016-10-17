@@ -35,25 +35,10 @@
         android:text="This is the body of the note. Add your note here."
         android:id="@+id/noteBody"
         android:layout_below="@+id/noteTitle"
+        android:layout_alignParentEnd="true"
+        android:layout_toEndOf="@+id/noteImage"
         android:ellipsize="end"
         android:singleLine="true"/>
 
-    <com.facebook.share.widget.ShareButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-<<<<<<< HEAD
-        android:layout_alignBottom="@+id/noteBody"
-        android:layout_alignParentEnd="true"
-        android:id="@+id/shareButton"
-        android:layout_alignParentTop="true"
-        style="@style/com_facebook_button_share" />
-
-=======
-        android:id="@+id/shareButton"
-        android:layout_alignBottom="@+id/noteTitle"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentTop="true"
-        app:srcCompat="@android:drawable/ic_menu_share" />
->>>>>>> parent of cf6866e... Commiting Color Changes
 
 </RelativeLayout>

@@ -11,6 +11,7 @@ import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.ContextMenu;
 import android.view.MenuInflater;
+<<<<<<< HEAD
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -31,6 +32,14 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+=======
+            import android.view.MenuItem;
+            import android.view.View;
+            import android.widget.AdapterView;
+            import android.widget.ArrayAdapter;
+            import android.widget.ListView;
+            import android.widget.Toast;
+>>>>>>> parent of cf6866e... Commiting Color Changes
 
 import static com.mobilecommerce.notepadapplication.Note.trackerForNoteId;
 
@@ -48,9 +57,22 @@ public class MainActivityListFragment extends ListFragment {
     private int counter = 0;
     public static String noteTitleToBeUsedByAllInEdit,noteBodyToBeUsedByAllInEdit, noteIdToBeUsedByAllInEdit, noteCategoryToBeUsedByAllInEdit ="";
 
+<<<<<<< HEAD
 
     public void onActivityCreated(Bundle savedInstance) {
         super.onActivityCreated(savedInstance);
+=======
+        private ArrayList<Note> notes;
+        private AdapterForNote adapterForNote;
+        private static final String noteTextFile = "noteTextFile15.txt";
+        private String[] rowsOfNotes;
+        private String[][] entireNote = new String[10][];
+        public static String noteTitleToBeUsedByAllInEdit ="";
+
+
+        public void onActivityCreated(Bundle savedInstance) {
+            super.onActivityCreated(savedInstance);
+>>>>>>> parent of cf6866e... Commiting Color Changes
 
 
 
@@ -164,11 +186,21 @@ public class MainActivityListFragment extends ListFragment {
               We will create a new intent and further pass along the information of a particular
               note such as its ID,Category,Title and Body */
 
+<<<<<<< HEAD
         Note note = (Note) getListAdapter().getItem(position);
         noteTitleToBeUsedByAllInEdit = note.getTitle();
         noteBodyToBeUsedByAllInEdit = note.getDescription();
         noteCategoryToBeUsedByAllInEdit = note.getCategory().toString();
         noteIdToBeUsedByAllInEdit = note.getNoteId();
+=======
+            Note note = (Note) getListAdapter().getItem(position);
+
+            Intent intent = new Intent(getActivity(),ViewNoteActivity.class);
+            intent.putExtra(MainActivity.Second_Note_Id, note.getNoteId());
+            intent.putExtra(MainActivity.Second_Note_Category,note.getCategory());
+            intent.putExtra(MainActivity.Second_Note_Title, note.getTitle());
+            intent.putExtra(MainActivity.Second_Note_Body,note.getDescription());
+>>>>>>> parent of cf6866e... Commiting Color Changes
 
         Intent intent = new Intent(getActivity(),ViewNoteActivity.class);
         intent.putExtra(MainActivity.Second_Note_Id, note.getNoteId());
@@ -213,7 +245,15 @@ public class MainActivityListFragment extends ListFragment {
 
         switch (fragmentToLoad){
 
+<<<<<<< HEAD
             case VIEW:
+=======
+            Intent intent = new Intent(getActivity(),ActivityOfNoteDetails.class);
+            intent.putExtra(MainActivity.Second_Note_Id, note.getNoteId());
+            intent.putExtra(MainActivity.Second_Note_Category,note.getCategory());
+            intent.putExtra(MainActivity.Second_Note_Title, note.getTitle());
+            intent.putExtra(MainActivity.Second_Note_Body,note.getDescription());
+>>>>>>> parent of cf6866e... Commiting Color Changes
 
                 intent.putExtra(MainActivity.Second_Note_Fragment_To_Load, MainActivity.FragmentToLoad.VIEW);
                 break;
@@ -293,6 +333,7 @@ public class MainActivityListFragment extends ListFragment {
             Toast.makeText(context, "", Toast.LENGTH_LONG).show();
         }
 
+<<<<<<< HEAD
     }
 
     private int checkTotalNumberOfNotes() {
@@ -300,6 +341,65 @@ public class MainActivityListFragment extends ListFragment {
         int totalNumberOfNotes=1;
         try {
             File file = context.getFileStreamPath(noteTextFile);
+=======
+        public void getTextFromNoteFile(ArrayList notes){
+            final Context context = getActivity().getApplicationContext();
+            try {
+                File file = context.getFileStreamPath(noteTextFile);
+                if(file.exists()) {
+                    InputStream inputStream = context.openFileInput(noteTextFile);
+
+                    if (inputStream != null) {
+
+                        InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
+                        BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+                        String string;
+                        StringBuilder stringBuilder = new StringBuilder();
+
+                        while ((string = bufferedReader.readLine()) != null) {
+                            stringBuilder.append(string + "\n");
+                        }
+
+                        inputStream.close();
+                        Log.d("OUTPUT", stringBuilder.toString());
+                        String fileText = stringBuilder.toString();
+                        rowsOfNotes = fileText.split("\n");
+
+                        Log.d("OUTPUT ROWS", rowsOfNotes[0]+","+rowsOfNotes[1]+","+rowsOfNotes[2]);
+
+                        Log.d("LENGTH", String.valueOf(rowsOfNotes.length));
+
+
+                        for(int rowNumber=0; rowNumber< rowsOfNotes.length; rowNumber++) {
+                            entireNote[rowNumber] = rowsOfNotes[rowNumber].split(",");
+                            Log.d("NOTE LENGTH",String.valueOf(entireNote[rowNumber].length));
+                            Log.d("NOTE TILE",entireNote[rowNumber][0] );
+                        }
+                        for(int noteParts=0; noteParts<rowsOfNotes.length; noteParts++) {
+                            Note.Category category=null;
+
+                            if(entireNote[noteParts][2].equals("PERSONAL"))
+                                category = Note.Category.PERSONAL;
+                            else if(entireNote[noteParts][2].equals("FAMILY"))
+                                category = Note.Category.FAMILY;
+                            else if(entireNote[noteParts][2].equals("SCHOOL"))
+                                category = Note.Category.SCHOOL;
+                            else if(entireNote[noteParts][2].equals("BILL"))
+                                category = Note.Category.BILL;
+                            else if(entireNote[noteParts][2].equals("FOOD"))
+                                category = Note.Category.FOOD;
+                            else if(entireNote[noteParts][2].equals("DEFAULT"))
+                                category = Note.Category.DEFAULT;
+                            else if(entireNote[noteParts][2].equals("PARTY"))
+                                category = Note.Category.PARTY;
+                            else if(entireNote[noteParts][2].equals("SHOPPING"))
+                                category = Note.Category.SHOPPING;
+                            else if(entireNote[noteParts][2].equals("THOUGHTS"))
+                                category = Note.Category.THOUGHTS;
+
+                            notes.add(new Note(entireNote[noteParts][0],entireNote[noteParts][1],category));
+                        }
+>>>>>>> parent of cf6866e... Commiting Color Changes
 
             if (file.exists()) {
                 InputStream inputStream = context.openFileInput(noteTextFile);
@@ -424,12 +524,19 @@ public class MainActivityListFragment extends ListFragment {
         switch (menuItem.getItemId()) {
             case R.id.edit:// if we press edit, it will return the following
 
+<<<<<<< HEAD
                 launchNoteDetailActivity(MainActivity.FragmentToLoad.EDIT, rowPosition);
                 return true;
 
             case R.id.delete:// if we press delete, it will call deleteNote() function
                 deleteNote(rowPosition);
                 return true;
+=======
+                    launchNoteDetailActivity(MainActivity.FragmentToLoad.EDIT, rowPosition);
+                    return true;
+            }
+            return super.onContextItemSelected(menuItem);
+>>>>>>> parent of cf6866e... Commiting Color Changes
         }
         return super.onContextItemSelected(menuItem);
     }

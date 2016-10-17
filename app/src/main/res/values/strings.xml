@@ -25,6 +25,7 @@
     <string name="action_italics">ITALICS</string>
     <string name="action_underline">UNDERLINE IT</string>
 
+<<<<<<< HEAD
     <!-- Adding facebook_app_id for Share to Facebook Feature -->
     <string name="facebook_app_id">345954055743337</string>
 
@@ -33,5 +34,7 @@
     <string name="delete_note">Delete</string>
 
 
+=======
+>>>>>>> parent of cf6866e... Commiting Color Changes
 
 </resources>

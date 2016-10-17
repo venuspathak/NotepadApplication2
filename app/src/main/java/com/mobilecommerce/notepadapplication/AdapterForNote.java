@@ -58,9 +58,8 @@ public class AdapterForNote extends ArrayAdapter<Note> {
 
         //Fill each new referenced view with data associated with the note it's referencing
         ViewHolder.title.setText(note.getTitle());
-        ViewHolder.noteIcon.setImageResource(note.getAssociatedDrawbleCategory());
+        ViewHolder.noteIcon.setImageResource(note.getAssociatedDrawble());
         ViewHolder.note.setText(note.getDescription());
-        ViewHolder.colorIcon.setBackgroundColor(note.getAssociatedDrawbleColorCategory());
 
         //we will have a return item here as getView is not void
         return convertView;
