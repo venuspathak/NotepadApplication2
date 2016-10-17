@@ -83,13 +83,6 @@
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/imageView"
-        android:layout_centerVertical="true"
-        android:layout_alignStart="@+id/editMessageScrollView" />
-
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
         app:srcCompat="@android:drawable/ic_menu_gallery"
         android:id="@+id/editNoteGallery"
         android:layout_alignParentBottom="true"
@@ -104,6 +97,12 @@
         android:layout_toEndOf="@+id/editNoteGallery"
         android:layout_alignTop="@+id/editNoteGallery" />
 
+    <ImageView
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:id="@+id/imageView"
+        android:layout_above="@+id/saveNoteButton"
+        android:layout_toEndOf="@+id/editNoteGallery" />
 
 
 </RelativeLayout>
