@@ -4,7 +4,6 @@ package com.mobilecommerce.notepadapplication;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -62,7 +61,7 @@ public class EditNoteFragment extends Fragment {
 
     private ImageButton noteCategoryButton, noteColorCategoryButton;
     private Note.Category savedNoteCategoryButton;
-    private Note.ColorCategory savedColorCategoryButton;
+    private Colors.ColorCategory savedColorCategoryButton;
     public AlertDialog categoryAlertDialogObject, dialogForConfirm, colorAlertDialogObject;
     private EditText title, body;
     private static final String categoryModified = "Modified Category";
@@ -198,11 +197,11 @@ public class EditNoteFragment extends Fragment {
         // Orientation has been changed if the category is grabbed from bundle
 
         if(savedNoteCategoryButton!=null){
-            noteCategoryButton.setImageResource(Note.categoryToDrawbleCategory(savedNoteCategoryButton));
+            noteCategoryButton.setImageResource(Note.categoryToDrawble(savedNoteCategoryButton));
         }else if(!newNote) { // this is coming from the fragment
             Note.Category noteCategory = (Note.Category) intent.getSerializableExtra(MainActivity.Second_Note_Category);
             savedNoteCategoryButton = noteCategory;
-            noteCategoryButton.setImageResource(Note.categoryToDrawbleCategory(noteCategory));
+            noteCategoryButton.setImageResource(Note.categoryToDrawble(noteCategory));
             // noteCategoryFinal=noteCategory; // This has been done to set the global variable with the modified category so that
             // it can be accessed in the method for writing into file
         }
@@ -587,27 +586,27 @@ public class EditNoteFragment extends Fragment {
 
                 switch (selectColor) {
                     case 0:
-                        savedColorCategoryButton = Note.ColorCategory.GREY;
+                        savedColorCategoryButton = Colors.ColorCategory.GREY;
                         relativeLayout.setBackgroundColor(getResources().getColor(R.color.greyBackgroundColor));
                         break;
 
                     case 1:
-                        savedColorCategoryButton = Note.ColorCategory.PINK;
+                        savedColorCategoryButton = Colors.ColorCategory.PINK;
                         relativeLayout.setBackgroundColor(getResources().getColor(R.color.pinkBackgroundColor));
                         break;
 
                     case 2:
-                        savedColorCategoryButton = Note.ColorCategory.BLUE;
+                        savedColorCategoryButton = Colors.ColorCategory.BLUE;
                         relativeLayout.setBackgroundColor(getResources().getColor(R.color.blueBackgroundColor));
                         break;
 
                     case 3:
-                        savedColorCategoryButton = Note.ColorCategory.WHITE;
+                        savedColorCategoryButton = Colors.ColorCategory.WHITE;
                         relativeLayout.setBackgroundColor(getResources().getColor(R.color.whiteBackgroundColor));
                         break;
 
                     case 4:
-                        savedColorCategoryButton = Note.ColorCategory.ORANGE;
+                        savedColorCategoryButton = Colors.ColorCategory.ORANGE;
                         relativeLayout.setBackgroundColor(getResources().getColor(R.color.orangeBackgroundColor));
                         break;
                 }
