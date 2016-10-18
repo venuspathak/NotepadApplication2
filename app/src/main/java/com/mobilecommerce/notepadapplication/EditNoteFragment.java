@@ -111,16 +111,19 @@ public class EditNoteFragment extends Fragment {
             case R.id.action_bold_note:
                 title.setTypeface(title.getTypeface(), Typeface.BOLD);
                 body.setTypeface(body.getTypeface(), Typeface.BOLD);
+                //noteNewBoldToBeUsedByAllInEdit = "true";
                 return true;
 
             case R.id.action_italics_note:
                 title.setTypeface(title.getTypeface(), Typeface.ITALIC);
                 body.setTypeface(body.getTypeface(), Typeface.ITALIC);
+                //noteNewItalicsToBeUsedByAllInEdit = "true";
                 return true;
 
             case R.id.action_underline_note:
                 title.setPaintFlags(title.getPaintFlags() |   Paint.UNDERLINE_TEXT_FLAG);
                 body.setPaintFlags(body.getPaintFlags() |   Paint.UNDERLINE_TEXT_FLAG);
+                //noteNewUnderlineToBeUsedByAllInEdit = "true";
                 return true;
 
             default:
@@ -203,8 +206,6 @@ public class EditNoteFragment extends Fragment {
             Note.Category noteCategory = (Note.Category) intent.getSerializableExtra(MainActivity.Second_Note_Category);
             savedNoteCategoryButton = noteCategory;
             noteCategoryButton.setImageResource(Note.categoryToDrawble(noteCategory));
-           // noteCategoryFinal=noteCategory; // This has been done to set the global variable with the modified category so that
-            // it can be accessed in the method for writing into file
         }
 
         buildCategoryDialog();
@@ -399,6 +400,9 @@ public class EditNoteFragment extends Fragment {
                 String newNoteBody = body.getText().toString();
                 String noteId = String.valueOf(trackerForNoteId);
                 Log.d("check2", noteId);
+                //String newBoldToBeWrittenIntoFile = noteNewBoldToBeUsedByAllInEdit;
+                //String newItalicsToBeWrittenIntoFile = noteNewItalicsToBeUsedByAllInEdit;
+                //String newUnderlineToBeWrittenIntoFile = noteNewUnderlineToBeUsedByAllInEdit;
 
                 String newNoteCategory;
 
@@ -409,6 +413,7 @@ public class EditNoteFragment extends Fragment {
 
                 // Id getting saved in note is a combination of string: id, integer(trackerForNoteId) and note title
                 String textToBeWrittenIntoFile = newNoteTitle+","+newNoteBody+","+newNoteCategory+","+"id"+noteId+newNoteTitle;
+                //String textToBeWrittenIntoFile = newNoteTitle+","+newNoteBody+","+newNoteCategory+","+"id"+noteId+newNoteTitle+","+newBoldToBeWrittenIntoFile+","+newItalicsToBeWrittenIntoFile+","+newUnderlineToBeWrittenIntoFile;
                 String identifierTitleAddOrEdit="";
 
                 trackerForNoteId++; // Increasing the note id by 1
@@ -447,8 +452,12 @@ public class EditNoteFragment extends Fragment {
         String oldBody = noteBodyToBeUsedByAllInEdit;
         String oldCategory = noteCategoryToBeUsedByAllInEdit;
         String oldId = noteIdToBeUsedByAllInEdit;
+        //String oldBold = noteBoldToBeUsedByAllInEdit;
+        //String oldItalics = noteItalicsToBeUsedByAllInEdit;
+        //String oldUnderline = noteUnderlineToBeUsedByAllInEdit;
 
         String oldString = oldTitle+","+oldBody+","+oldCategory+","+oldId;
+        //String oldString = oldTitle+","+oldBody+","+oldCategory+","+oldId+","+oldBold+","+oldItalics+","+oldUnderline;
         final Context context = getActivity().getApplicationContext();
 
         File file, fileTemp;

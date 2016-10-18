@@ -21,6 +21,11 @@ public class MainActivity extends AppCompatActivity{
     public static final String Second_Note_Body = "com.mobilecommerce.notepadapplication.Note Body";
     public static final String Second_Note_Category = "com.mobilecommerce.notepadapplication.Note Category";
     public static final String Second_Note_Fragment_To_Load = "com.mobilecommerce.notepadapplication.Fragment To Load";
+    //public static final String Second_Note_Bold = "com.mobilecommerce.notepadapplication.Note Bold";
+    //public static final String Second_Note_Italics = "com.mobilecommerce.notepadapplication.Note Italics";
+    //public static final String Second_Note_Underline = "com.mobilecommerce.notepadapplication.Note Underline";
+
+
     public enum FragmentToLoad{VIEW, EDIT, ADD}
 
     private FloatingActionButton addNewNote;

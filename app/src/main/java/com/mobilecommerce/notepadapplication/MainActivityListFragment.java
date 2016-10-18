@@ -43,6 +43,8 @@ public class MainActivityListFragment extends ListFragment {
         private String[] rowsOfNotes;
         private String[][] entireNote = new String[50][];
         public static String noteTitleToBeUsedByAllInEdit,noteBodyToBeUsedByAllInEdit, noteIdToBeUsedByAllInEdit, noteCategoryToBeUsedByAllInEdit ="";
+        //public static String noteBoldToBeUsedByAllInEdit="false", noteItalicsToBeUsedByAllInEdit="false", noteUnderlineToBeUsedByAllInEdit="false";
+        //public static String noteNewBoldToBeUsedByAllInEdit="false", noteNewItalicsToBeUsedByAllInEdit="false", noteNewUnderlineToBeUsedByAllInEdit="false";
 
 
     public void onActivityCreated(Bundle savedInstance) {
@@ -111,12 +113,20 @@ public class MainActivityListFragment extends ListFragment {
             noteBodyToBeUsedByAllInEdit = note.getDescription();
             noteCategoryToBeUsedByAllInEdit = note.getCategory().toString();
             noteIdToBeUsedByAllInEdit = note.getNoteId();
+            //noteBoldToBeUsedByAllInEdit = note.getNoteBold();
+            //noteItalicsToBeUsedByAllInEdit = note.getNoteItalics();
+            //noteUnderlineToBeUsedByAllInEdit = note.getNoteUnderline();
+
 
             Intent intent = new Intent(getActivity(),ViewNoteActivity.class);
             intent.putExtra(MainActivity.Second_Note_Id, note.getNoteId());
             intent.putExtra(MainActivity.Second_Note_Category,note.getCategory());
             intent.putExtra(MainActivity.Second_Note_Title, note.getTitle());
             intent.putExtra(MainActivity.Second_Note_Body,note.getDescription());
+            //intent.putExtra(MainActivity.Second_Note_Bold,note.getNoteBold());
+            //intent.putExtra(MainActivity.Second_Note_Italics,note.getNoteItalics());
+            //intent.putExtra(MainActivity.Second_Note_Underline,note.getNoteUnderline());
+
 
             switch (fragmentToLoad){
 
@@ -144,12 +154,18 @@ public class MainActivityListFragment extends ListFragment {
             noteBodyToBeUsedByAllInEdit = note.getDescription();
             noteCategoryToBeUsedByAllInEdit = note.getCategory().toString();
             noteIdToBeUsedByAllInEdit = note.getNoteId();
+            //noteBoldToBeUsedByAllInEdit = note.getNoteBold();
+            //noteItalicsToBeUsedByAllInEdit = note.getNoteItalics();
+            //noteUnderlineToBeUsedByAllInEdit = note.getNoteUnderline();
 
             Intent intent = new Intent(getActivity(),ActivityOfNoteDetails.class);
             intent.putExtra(MainActivity.Second_Note_Id, note.getNoteId());
             intent.putExtra(MainActivity.Second_Note_Category,note.getCategory());
             intent.putExtra(MainActivity.Second_Note_Title, note.getTitle());
             intent.putExtra(MainActivity.Second_Note_Body,note.getDescription());
+            //intent.putExtra(MainActivity.Second_Note_Bold,note.getNoteBold());
+            //intent.putExtra(MainActivity.Second_Note_Italics,note.getNoteItalics());
+            //intent.putExtra(MainActivity.Second_Note_Underline,note.getNoteUnderline());
 
             switch (fragmentToLoad){
 
@@ -189,18 +205,10 @@ public class MainActivityListFragment extends ListFragment {
                         String fileText = stringBuilder.toString();
                         rowsOfNotes = fileText.split("\n");
 
-                       // Log.d("OUTPUT ROWS", rowsOfNotes[0]+","+rowsOfNotes[1]+","+rowsOfNotes[2]);
-
                         for(int rowNumber=0; rowNumber< rowsOfNotes.length; rowNumber++) {
-                            // Log.d("OUTPUT ROW"+rowNumber, rowsOfNotes[rowNumber]);
+                            entireNote[rowNumber] = rowsOfNotes[rowNumber].split(",");
                         }
 
-                            for(int rowNumber=0; rowNumber< rowsOfNotes.length; rowNumber++) {
-                            entireNote[rowNumber] = rowsOfNotes[rowNumber].split(",");
-                              //       Log.d("INPUT ROW" + rowNumber, entireNote[rowNumber][0]);
-                                //Log.d("NOTE LENGTH",String.valueOf(entireNote[rowNumber].length));
-                            //Log.d("NOTE TILE",entireNote[rowNumber][0] );
-                        }
                         for(int noteParts=0; noteParts<rowsOfNotes.length; noteParts++) {
                             Note.Category category=null;
 
@@ -224,7 +232,8 @@ public class MainActivityListFragment extends ListFragment {
                                 category = Note.Category.THOUGHTS;
 
                             notes.add(new Note(entireNote[noteParts][0], entireNote[noteParts][1],category,entireNote[noteParts][3]));
-                     // Log.d("AJAY OUTPUT", entireNote[noteParts][0]);
+                            //notes.add(new Note(entireNote[noteParts][0], entireNote[noteParts][1],category,entireNote[noteParts][3], entireNote[noteParts][4], entireNote[noteParts][5], entireNote[noteParts][6]));
+
                         }
 
                     }
@@ -285,10 +294,14 @@ public class MainActivityListFragment extends ListFragment {
         noteBodyToBeUsedByAllInEdit = note.getDescription();
         noteCategoryToBeUsedByAllInEdit = note.getCategory().toString();
         noteIdToBeUsedByAllInEdit = note.getNoteId();
+        //noteBoldToBeUsedByAllInEdit = note.getNoteBold();
+        //noteItalicsToBeUsedByAllInEdit = note.getNoteItalics();
+        //noteUnderlineToBeUsedByAllInEdit = note.getNoteUnderline();
 
 
         String stringToBeDeleted= noteTitleToBeUsedByAllInEdit+","+noteBodyToBeUsedByAllInEdit+","+noteCategoryToBeUsedByAllInEdit+","+noteIdToBeUsedByAllInEdit;
-      //  Log.d("SEE THIS", stringToBeDeleted);
+        //String stringToBeDeleted= noteTitleToBeUsedByAllInEdit+","+noteBodyToBeUsedByAllInEdit+","+noteCategoryToBeUsedByAllInEdit+","+noteIdToBeUsedByAllInEdit+","+noteBoldToBeUsedByAllInEdit+","+noteItalicsToBeUsedByAllInEdit+","+noteUnderlineToBeUsedByAllInEdit;
+
 
         final Context context = getActivity().getApplicationContext();
 
@@ -310,7 +323,7 @@ public class MainActivityListFragment extends ListFragment {
 
             for (String line; (line = bufferedReader.readLine()) != null;) {
                 if((line.equals(stringToBeDeleted))) {
-                    //line = line.replace(stringToBeDeleted, "");
+                    // DO NOTHING
                 }
                 else
                     printWriter.println(line);
@@ -324,10 +337,6 @@ public class MainActivityListFragment extends ListFragment {
             Intent intent = new Intent(getActivity(), MainActivity.class);
             startActivity(intent);
 
-
-           // final Context context2 = getActivity().getApplicationContext();
-
-           // File file2 = context2.getFileStreamPath(tmp);
                 if(fileTemp.exists()) {
                     InputStream inputStream = context.openFileInput(tmp);
 
@@ -345,10 +354,6 @@ public class MainActivityListFragment extends ListFragment {
                         inputStream.close();
                         String fileText = stringBuilder.toString();
                         rowsOfNotes = fileText.split("\n");
-
-                       // Log.d("OUTPUT ROW--1", rowsOfNotes[0]);
-                       // Log.d("OUTPUT ROW--2", rowsOfNotes[1]);
-                       // Log.d("OUTPUT ROW--3", rowsOfNotes[2]);
 
                         for (int rowNumber = 0; rowNumber < rowsOfNotes.length; rowNumber++) {
                             entireNote[rowNumber] = rowsOfNotes[rowNumber].split(",");

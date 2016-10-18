@@ -6,6 +6,8 @@ package com.mobilecommerce.notepadapplication;
 
 import android.content.Intent;
 
+import android.graphics.Paint;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -42,7 +44,23 @@ public class ViewNoteFragment extends Fragment {
         body.setText(intent.getExtras().getString(MainActivity.Second_Note_Body));
         Note.Category noteCategory = (Note.Category) intent.getSerializableExtra(MainActivity.Second_Note_Category);// we have used getSerializable here instead of getString as data type of Category is enum.
         imageIcon.setImageResource(Note.categoryToDrawble(noteCategory));
+   /*
 
+        if(noteBoldToBeUsedByAllInEdit.equals("true")){
+            title.setTypeface(title.getTypeface(), Typeface.BOLD);
+            body.setTypeface(body.getTypeface(), Typeface.BOLD);
+        }
+
+        if(noteItalicsToBeUsedByAllInEdit.equals("true")){
+            title.setTypeface(title.getTypeface(), Typeface.ITALIC);
+            body.setTypeface(body.getTypeface(), Typeface.ITALIC);
+        }
+
+        if(noteUnderlineToBeUsedByAllInEdit.equals("true")){
+            title.setPaintFlags(title.getPaintFlags() |   Paint.UNDERLINE_TEXT_FLAG);
+            body.setPaintFlags(body.getPaintFlags() |   Paint.UNDERLINE_TEXT_FLAG);
+        }
+*/
         return layoutFragment;
     }
 

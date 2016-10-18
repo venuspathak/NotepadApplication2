@@ -11,6 +11,7 @@ import java.io.InputStream;
 public class Note {
 
     private String noteTitle, noteDescription, noteId;
+    // private String noteBold, noteItalics, noteUnderline;
     private long dateCreated;
     private Category noteCategory;
 
@@ -18,7 +19,6 @@ public class Note {
 
 
     public enum Category {PERSONAL, FAMILY, SCHOOL, BILL, FOOD, DEFAULT, PARTY, SHOPPING, THOUGHTS }
-
 
 
     public Note(String noteTitle, String noteDescription, Category noteCategory, String noteId) {
@@ -29,6 +29,22 @@ public class Note {
         this.noteId = noteId;
         this.dateCreated = dateCreated;
     }
+
+    /*
+
+    public Note(String noteTitle, String noteDescription, Category noteCategory, String noteId, String noteBold, String noteItalics, String noteUnderline) {
+
+        this.noteTitle = noteTitle;
+        this.noteDescription = noteDescription;
+        this.noteCategory = noteCategory;
+        this.noteId = noteId;
+        this.dateCreated = dateCreated;
+        this.noteBold = noteBold;
+        this.noteItalics = noteItalics;
+        this.noteUnderline = noteUnderline;
+    }
+
+    */
 
     public String getTitle() {
         return noteTitle;
@@ -46,6 +62,19 @@ public class Note {
         return noteId;
     }
 
+    /*
+    public String getNoteBold()
+        return noteBold;
+    }
+
+    public String getNoteItalics() {
+        return noteItalics;
+    }
+
+    public String getNoteUnderline() {
+        return noteUnderline;
+    }
+     */
 
     public long getDateCreated() {
         return dateCreated;
