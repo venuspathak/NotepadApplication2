@@ -70,11 +70,11 @@ public class EditNoteFragment extends Fragment {
     private EditText title, body;
     private static final String categoryModified = "Modified Category";
     public Boolean newNote = false;
-    private static final String noteTextFile = "noteTextFile87.txt";
+    private static final String noteTextFile = "noteTextFile100.txt";
     private EditText textEditor;
     private Note.Category noteCategoryFinal;
     private String[] rowsOfNotes;
-    private String[][] entireNote = new String[50][];
+    private String[][] entireNote = new String[1000][];
 
     private static final int PICK_IMAGE = 100;
     private static final int CAMERA_REQUEST = 1;
@@ -83,7 +83,7 @@ public class EditNoteFragment extends Fragment {
     private String currentPhotoPath;
     private static final String TAG = "";
     private RelativeLayout relativeLayout;
-    private static int identifierAddOrEdit=0;
+    private int identifierAddOrEdit=0;
     private static String trackForNewNote = "";
     private static MenuItem menuBold, menuItalic, menuUnderline;
 
@@ -398,6 +398,7 @@ public class EditNoteFragment extends Fragment {
 
                 String newNoteTitle = title.getText().toString(); // new is for both edited as well as new one
                 String newNoteBody = body.getText().toString();
+
                 String noteId = String.valueOf(trackerForNoteId);
                 Log.d("check2", noteId);
                 //String newBoldToBeWrittenIntoFile = noteNewBoldToBeUsedByAllInEdit;
@@ -412,11 +413,9 @@ public class EditNoteFragment extends Fragment {
                     newNoteCategory = savedNoteCategoryButton.toString();
 
                 // Id getting saved in note is a combination of string: id, integer(trackerForNoteId) and note title
-                String textToBeWrittenIntoFile = newNoteTitle+","+newNoteBody+","+newNoteCategory+","+"id"+noteId+newNoteTitle;
+                String textToBeWrittenIntoFile = newNoteTitle+";"+newNoteBody+";"+newNoteCategory+";"+"id"+noteId+newNoteTitle;
                 //String textToBeWrittenIntoFile = newNoteTitle+","+newNoteBody+","+newNoteCategory+","+"id"+noteId+newNoteTitle+","+newBoldToBeWrittenIntoFile+","+newItalicsToBeWrittenIntoFile+","+newUnderlineToBeWrittenIntoFile;
                 String identifierTitleAddOrEdit="";
-
-                trackerForNoteId++; // Increasing the note id by 1
 
                 if(identifierAddOrEdit==0){ // This means note is being edited
                     identifierTitleAddOrEdit = noteTitleToBeUsedByAllInEdit;

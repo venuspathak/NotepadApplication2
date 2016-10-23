@@ -39,9 +39,9 @@ public class MainActivityListFragment extends ListFragment {
 
         public static ArrayList<Note> notes;
         private AdapterForNote adapterForNote;
-        private static final String noteTextFile = "noteTextFile87.txt";
+        private static final String noteTextFile = "noteTextFile100.txt";
         private String[] rowsOfNotes;
-        private String[][] entireNote = new String[50][];
+        private String[][] entireNote = new String[1000][];
         public static String noteTitleToBeUsedByAllInEdit,noteBodyToBeUsedByAllInEdit, noteIdToBeUsedByAllInEdit, noteCategoryToBeUsedByAllInEdit ="";
         //public static String noteBoldToBeUsedByAllInEdit="false", noteItalicsToBeUsedByAllInEdit="false", noteUnderlineToBeUsedByAllInEdit="false";
         //public static String noteNewBoldToBeUsedByAllInEdit="false", noteNewItalicsToBeUsedByAllInEdit="false", noteNewUnderlineToBeUsedByAllInEdit="false";
@@ -54,7 +54,7 @@ public class MainActivityListFragment extends ListFragment {
 
         notes = new ArrayList<Note>();
         getTextFromNoteFile(notes); // This is called to read the notes from the file and then displaying them
-        checkTotalNumberOfNotes(); // This is called to get the total number of notes. This value will be used to
+        trackerForNoteId = checkTotalNumberOfNotes(); // This is called to get the total number of notes. This value will be used to
             // populate global variable trackerForNoteId
 
         /*
@@ -206,7 +206,7 @@ public class MainActivityListFragment extends ListFragment {
                         rowsOfNotes = fileText.split("\n");
 
                         for(int rowNumber=0; rowNumber< rowsOfNotes.length; rowNumber++) {
-                            entireNote[rowNumber] = rowsOfNotes[rowNumber].split(",");
+                            entireNote[rowNumber] = rowsOfNotes[rowNumber].split(";");
                         }
 
                         for(int noteParts=0; noteParts<rowsOfNotes.length; noteParts++) {
@@ -274,8 +274,9 @@ public class MainActivityListFragment extends ListFragment {
                         String fileText = stringBuilder.toString();
                         rowsOfNotes = fileText.split("\n");
 
-                        totalNumberOfNotes = rowsOfNotes.length;
-                        trackerForNoteId = totalNumberOfNotes+1;
+                        totalNumberOfNotes = (rowsOfNotes.length)+1;
+                        //trackerForNoteId = totalNumberOfNotes+1;
+                        //totalNumberOfNotes = trackerForNoteId;
                        // Log.d("check1", String.valueOf(trackerForNoteId));
                     }
                 }
