@@ -7,6 +7,7 @@ package com.mobilecommerce.notepadapplication;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -15,6 +16,7 @@ import android.app.Activity;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.provider.MediaStore;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.os.EnvironmentCompat;
 import android.support.v7.app.AlertDialog;
@@ -49,6 +51,7 @@ import java.nio.Buffer;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Scanner;
+import java.util.jar.Manifest;
 
 import static com.mobilecommerce.notepadapplication.MainActivityListFragment.noteBodyToBeUsedByAllInEdit;
 import static com.mobilecommerce.notepadapplication.MainActivityListFragment.noteCategoryToBeUsedByAllInEdit;
@@ -70,7 +73,7 @@ public class EditNoteFragment extends Fragment {
     private EditText title, body;
     private static final String categoryModified = "Modified Category";
     public Boolean newNote = false;
-    private static final String noteTextFile = "noteTextFile100.txt";
+    private static final String noteTextFile = "noteTextFile104.txt";
     private EditText textEditor;
     private Note.Category noteCategoryFinal;
     private String[] rowsOfNotes;
@@ -86,6 +89,13 @@ public class EditNoteFragment extends Fragment {
     private int identifierAddOrEdit=0;
     private static String trackForNewNote = "";
     private static MenuItem menuBold, menuItalic, menuUnderline;
+    private static final int REQUEST_EXTERNAL_STORAGE = 1;
+    private static String[] PERMISSIONS_STORAGE = {
+            android.Manifest.permission.CAMERA,
+            android.Manifest.permission.READ_EXTERNAL_STORAGE,
+            android.Manifest.permission.WRITE_EXTERNAL_STORAGE,
+            android.Manifest.permission_group.CAMERA
+    };
 
     Uri uri;
 
@@ -211,6 +221,7 @@ public class EditNoteFragment extends Fragment {
         buildCategoryDialog();
         buildingConfirmDialog(fragmentLayout);
         buildColorPickerDialog();
+        verifyPermissions(getActivity());
 
         //setting a listener on the note category button
         noteCategoryButton.setOnClickListener(new View.OnClickListener(){
@@ -293,6 +304,7 @@ public class EditNoteFragment extends Fragment {
         else if (requestCode == CAMERA_REQUEST && resultCode == Activity.RESULT_OK) {
             try{
                 bitmapImage = MediaStore.Images.Media.getBitmap(this.getActivity().getContentResolver(), Uri.parse(currentPhotoPath));
+                imageView.setImageBitmap(bitmapImage);
             }
             catch (IOException exception) {
                 exception.printStackTrace();
@@ -455,8 +467,8 @@ public class EditNoteFragment extends Fragment {
         //String oldItalics = noteItalicsToBeUsedByAllInEdit;
         //String oldUnderline = noteUnderlineToBeUsedByAllInEdit;
 
-        String oldString = oldTitle+","+oldBody+","+oldCategory+","+oldId;
-        //String oldString = oldTitle+","+oldBody+","+oldCategory+","+oldId+","+oldBold+","+oldItalics+","+oldUnderline;
+        String oldString = oldTitle+";"+oldBody+";"+oldCategory+";"+oldId;
+        //String oldString = oldTitle+";"+oldBody+";"+oldCategory+";"+oldId+";"+oldBold+";"+oldItalics+";"+oldUnderline;
         final Context context = getActivity().getApplicationContext();
 
         File file, fileTemp;
@@ -551,5 +563,12 @@ public class EditNoteFragment extends Fragment {
         colorAlertDialogObject = colorPickerBuilder.create();//we will use this to create our alert dialog window
 
 
+    }
+
+    public static void verifyPermissions(Activity activity) {
+        int permission = ActivityCompat.checkSelfPermission(activity, android.Manifest.permission.WRITE_EXTERNAL_STORAGE);
+        if(permission != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(activity, PERMISSIONS_STORAGE, REQUEST_EXTERNAL_STORAGE);
+        }
     }
 }

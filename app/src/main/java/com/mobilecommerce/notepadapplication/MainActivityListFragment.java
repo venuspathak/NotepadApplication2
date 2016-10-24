@@ -39,7 +39,7 @@ public class MainActivityListFragment extends ListFragment {
 
         public static ArrayList<Note> notes;
         private AdapterForNote adapterForNote;
-        private static final String noteTextFile = "noteTextFile100.txt";
+        private static final String noteTextFile = "noteTextFile104.txt";
         private String[] rowsOfNotes;
         private String[][] entireNote = new String[1000][];
         public static String noteTitleToBeUsedByAllInEdit,noteBodyToBeUsedByAllInEdit, noteIdToBeUsedByAllInEdit, noteCategoryToBeUsedByAllInEdit ="";
@@ -300,8 +300,8 @@ public class MainActivityListFragment extends ListFragment {
         //noteUnderlineToBeUsedByAllInEdit = note.getNoteUnderline();
 
 
-        String stringToBeDeleted= noteTitleToBeUsedByAllInEdit+","+noteBodyToBeUsedByAllInEdit+","+noteCategoryToBeUsedByAllInEdit+","+noteIdToBeUsedByAllInEdit;
-        //String stringToBeDeleted= noteTitleToBeUsedByAllInEdit+","+noteBodyToBeUsedByAllInEdit+","+noteCategoryToBeUsedByAllInEdit+","+noteIdToBeUsedByAllInEdit+","+noteBoldToBeUsedByAllInEdit+","+noteItalicsToBeUsedByAllInEdit+","+noteUnderlineToBeUsedByAllInEdit;
+        String stringToBeDeleted= noteTitleToBeUsedByAllInEdit+";"+noteBodyToBeUsedByAllInEdit+";"+noteCategoryToBeUsedByAllInEdit+";"+noteIdToBeUsedByAllInEdit;
+        //String stringToBeDeleted= noteTitleToBeUsedByAllInEdit+";"+noteBodyToBeUsedByAllInEdit+";"+noteCategoryToBeUsedByAllInEdit+";"+noteIdToBeUsedByAllInEdit+";"+noteBoldToBeUsedByAllInEdit+";"+noteItalicsToBeUsedByAllInEdit+";"+noteUnderlineToBeUsedByAllInEdit;
 
 
         final Context context = getActivity().getApplicationContext();
@@ -357,7 +357,7 @@ public class MainActivityListFragment extends ListFragment {
                         rowsOfNotes = fileText.split("\n");
 
                         for (int rowNumber = 0; rowNumber < rowsOfNotes.length; rowNumber++) {
-                            entireNote[rowNumber] = rowsOfNotes[rowNumber].split(",");
+                            entireNote[rowNumber] = rowsOfNotes[rowNumber].split(";");
                            // Log.d("NOTE LENGTH 2", String.valueOf(entireNote[rowNumber].length));
                            // Log.d("NOTE TILE 2", entireNote[rowNumber][0]);
                         }
